@@ -64,12 +64,11 @@ public:
     - Combval is the Combined value of firstVal and secondVal.
      */   
     char pressure2string( int firstVal, int secondVal, char * combVal);
-    /*
+    /* ## NOTE: Add selection for celsius/Fahrenheit
     This function determines the outside temperature of the presure transducer in celsius.
     - val is the RAW temperature value.
     - val is computed and converted to a string.
     - temp is the final value.
-    ####### Need to add selection for Fahrenheit and celsius.
      */   
     char I2Ctemp( int val, char * temp);
     /*
@@ -95,14 +94,14 @@ public:
     - I2C_ADDRESS is the I2C address to read from.
      */   
     char readI2CPressure(char * combVal, char * temp, int I2C_ADDRESS);
-    /*
-    This function sends a data frame to the Meshlium.  
+    /* ## NOTE: This function currently is not compatible with the meshlium.
+    This function sends a data frame to the Meshlium. 
     - ConvertFloat is the Maxboxtix analog value. 
     - CombVal is the the pressure value.
     - Temp is the temperature value.
     - MAC_ADDRESS is the Mac Address of the desired gateway. 
      */   
-    int send2mesh(char* convertFloat, char* combVal, char* temp, char* MAC_ADDRESS);
+    int Rain_Guage_Send(char* convertFloat, char* combVal, char* temp, char* MAC_ADDRESS);
     /*
     This function writes a data frame to the SD card.  
     - ConvertFloat is the Maxboxtix analog value. 
@@ -111,7 +110,12 @@ public:
      */   
     void sdWrite(char* convertFloat, char* combVal, char* temp);
 
-    char totalpressure2string(int firstVal, int secondVal, char * combVal);
+    char convert_Pressure(int firstVal, int secondVal, char * combVal);
+
+    int send_Frame(char* value, char* message, char* MAC_ADDRESS);
+
+    int send_Batt(char* MAC_ADDRESS);
+    
 };
 extern myLibrary	myObject;
 

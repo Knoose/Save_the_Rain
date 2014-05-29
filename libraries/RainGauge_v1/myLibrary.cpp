@@ -165,7 +165,7 @@ char myLibrary::pressure2string( int firstVal, int secondVal, char * combVal){
    strcpy(combVal,nfv);
    strcat(combVal,nsv);
 }
-char myLibrary::totalpressure2string( int firstVal, int secondVal, char * combVal){
+char myLibrary::convert_pressure( int firstVal, int secondVal, char * combVal){
   // Converts 2 int bytes to char * and then concatenates them
    char newVar[10];
    int totalVal = 0;
@@ -215,12 +215,11 @@ char myLibrary::readAnalog(char * convertFloat){
   //function to convert floating point numbers to integers
   float2string(val1, convertFloat, 3);
 }
-
-int myLibrary::send2mesh(char* convertFloat, char* combVal, char* temp, char* MAC_ADDRESS){
+int myLibrary::Rain_Guage_Send(char* convertFloat, char* combVal, char* temp, char* MAC_ADDRESS){
   // Create the packet that we will send wirelessly
   packetXBee* packet; 
   // Create new frame (ASCII)
-  frame.createFrame(ASCII,"Datalog Test V1.0"); 
+  frame.createFrame(ASCII,"Datalogging V1.1"); 
   // add frame field (String message) that writes the date and time
   frame.addSensor(SENSOR_STR, RTC.getTime());
   // add frame field (String message) writes the analog voltage to the SD card
@@ -233,7 +232,39 @@ int myLibrary::send2mesh(char* convertFloat, char* combVal, char* temp, char* MA
   frame.addSensor(SENSOR_BAT, (uint8_t) PWR.getBatteryLevel());
   // add frame field (Accelerometer axis)
   //frame.addSensor(SENSOR_ACC, ACC.getX(), ACC.getY(), ACC.getZ() );
-  USB.println(frame.getFrameSize(),DEC);  
+  //USB.println(frame.getFrameSize(),DEC);  
+  // Send To Gateway ( I.E. Meshlium ) 
+  packet=(packetXBee*) calloc(1,sizeof(packetXBee)); 
+  // Choose transmission mode: UNICAST or BROADCAST
+  packet->mode=UNICAST; 
+  // set destination XBee parameters to packet
+  xbeeDM.setDestinationParams(packet, MAC_ADDRESS, frame.buffer, frame.length); 
+  // send XBee packet
+  xbeeDM.sendXBee(packet);
+  // check TX flag
+  if( xbeeDM.error_TX == 0 )
+  {
+    free(packet);
+    packet=NULL;
+    return 1;
+  }
+  else
+  {
+    free(packet);
+    packet=NULL;
+    return 0;
+  }
+}
+int myLibrary::send_Frame(char* value, char* message, char* MAC_ADDRESS){
+  packetXBee* packet; 
+  // Create new frame (ASCII)
+  frame.createFrame(ASCII,message); 
+  // add frame field (String message) that writes the date and time
+  //frame.addSensor(SENSOR_STR, RTC.getTime());
+  // add frame field (String message) writes the analog voltage to the SD card
+  frame.addSensor(SENSOR_STR, (char *) value);
+  // add frame field (Battery level)
+  //frame.addSensor(SENSOR_BAT, (uint8_t) PWR.getBatteryLevel());
   // Send To Gateway ( I.E. Meshlium ) 
   packet=(packetXBee*) calloc(1,sizeof(packetXBee)); 
   // Choose transmission mode: UNICAST or BROADCAST
@@ -269,7 +300,7 @@ void myLibrary::sdWrite(char* convertFloat, char* combVal, char* temp){
   // define folder and file to store data ( SD CARD )
 
   // Create new frame (ASCII)
-  frame.createFrame(ASCII,"Datalog Test V1.0"); 
+  frame.createFrame(ASCII,"Datalogging V1.1"); 
   // add frame field (String message) that writes the date and time
   frame.addSensor(SENSOR_STR, RTC.getTime());
   // add frame field (String message) writes the analog voltage to the SD card
@@ -282,7 +313,34 @@ void myLibrary::sdWrite(char* convertFloat, char* combVal, char* temp){
   frame.addSensor(SENSOR_BAT, (uint8_t) PWR.getBatteryLevel());
   if(SD.appendln(filename, frame.buffer, frame.length)) USB.println(F("append ok"));
     else USB.println(F("append failed"));
-
 }
+int myLibrary::send_Batt(char* MAC_ADDRESS){
+  packetXBee* packet; 
+  // Create new frame (ASCII)
+  frame.createFrame(ASCII,"Battery Level"); 
+  frame.addSensor(SENSOR_BAT, PWR.getBatteryLevel()); 
+  packet=(packetXBee*) calloc(1,sizeof(packetXBee)); 
+  // Choose transmission mode: UNICAST or BROADCAST
+  packet->mode=UNICAST; 
+  // set destination XBee parameters to packet
+  xbeeDM.setDestinationParams(packet, MAC_ADDRESS, frame.buffer, frame.length); 
+  // send XBee packet
+  xbeeDM.sendXBee(packet);
+  // check TX flag
+  if( xbeeDM.error_TX == 0 )
+  {
+    free(packet);
+    packet=NULL;
+    return 1;
+  }
+  else
+  {
+    free(packet);
+    packet=NULL;
+    return 0;
+  }
+}
+
+
 /// Preinstantiate Objects /////////////////////////////////////////////////////
 myLibrary myObject = myLibrary();
