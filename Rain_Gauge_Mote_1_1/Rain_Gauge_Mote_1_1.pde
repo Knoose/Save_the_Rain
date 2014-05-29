@@ -65,11 +65,14 @@ void loop() {
   /////////////////////////////////////////////////////////////
   // frame.setFrameSize(125);
   // myObject.send2mesh(convertFloat,combVal, temp, MAC_ADDRESS);
-  error = myObject.send_DF(combVal,pres_0, MAC_ADDRESS);
+  error = myObject.send_Frame(combVal,pres_0, MAC_ADDRESS);
   if (error != 1)
     USB.println("Packet did not send");
   delay(500);
-  myObject.send_DF(temp,tempurature, MAC_ADDRESS);
+  error = myObject.send_Frame(temp,tempurature, MAC_ADDRESS);
+  if (error != 1)
+    USB.println("Packet did not send");
+  error = myObject.send_Batt(MAC_ADDRESS);
   if (error != 1)
     USB.println("Packet did not send");
   /////////////////////////////////////////////////////////////
