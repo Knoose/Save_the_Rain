@@ -106,13 +106,13 @@ int myLibrary::Init(){ // Open the USB connection
     USB.println(F("-------------------------------")); 
   #endif
 } 
-char myLibrary::readI2CPressure(char * combVal, char * temp, int I2C_ADDRESS){
+char myLibrary::read_Pressure(char * combVal, char * temp, int I2C_ADDRESS){
   int val, firstVal, secondVal, thirdVal, Status, totalVal=0;
   // Read I2C Device
   Wire.requestFrom(I2C_ADDRESS, 3);
    while(Wire.available()){    // slave may send less than requested
     for (int i = 0; i < 3 ; i++){
-      val = Wire.receive(); //reads the value from address 40 0x28
+      val = Wire.receive(); //reads the value from the I2C address 
       if ( i == 0 ){// makes sure we only get the status bits for the first byte
         Status = val >> 14; // shifts the value over by 14 bits so we can get the status bits
         if (Status != 0){ // checks the the first two status bits to make sure there are no issues.
@@ -173,7 +173,7 @@ char myLibrary::convert_Pressure( int firstVal, int secondVal, char * combVal){
    sprintf((char*)newVar, "%i\0",totalVal);
    strcpy(combVal,newVar);
 }
-char myLibrary::I2Ctemp( int val, char * temp){
+char myLibrary::convert_Temp( int val, char * temp){
   float cTemp, fTemp;
    val = val << 3; // shift the temperature to the left by 3 bits
   // Determines the Temperature in celsius 
@@ -209,13 +209,13 @@ int myLibrary::float2string(float f, char* c, uint8_t prec){
   else
     sprintf(c, "%i.%i\0",p,q);
 }
-char myLibrary::readAnalog(char * convertFloat){
+char myLibrary::read_Analog(char * convertFloat){
   float val1 = analogRead(ANALOG1);
   val1 = (val1/1023) *5;
   //function to convert floating point numbers to integers
   float2string(val1, convertFloat, 3);
 }
-int myLibrary::Rain_Guage_Send(char* convertFloat, char* combVal, char* temp, char* MAC_ADDRESS){
+int myLibrary::rg_Send(char* convertFloat, char* combVal, char* temp, char* MAC_ADDRESS){
   // Create the packet that we will send wirelessly
   packetXBee* packet; 
   // Create new frame (ASCII)
@@ -287,7 +287,7 @@ int myLibrary::send_Frame(char* value, char* message, char* MAC_ADDRESS){
     return 0;
   }
 }
-void myLibrary::sdWrite(char* convertFloat, char* combVal, char* temp){
+void myLibrary::write_SD(char* convertFloat, char* combVal, char* temp){
   char* path="/data";
   char* filename="/data/log";
   SD.ON();

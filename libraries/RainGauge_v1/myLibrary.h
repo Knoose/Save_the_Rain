@@ -70,7 +70,7 @@ public:
     - val is computed and converted to a string.
     - temp is the final value.
     */   
-    char I2Ctemp( int val, char * temp);
+    char convert_Temp( int val, char * temp);
     /*
     This function converts floats to strings.
     - float f : a floating point value.
@@ -83,7 +83,7 @@ public:
     - The analog value is converted from float to string.
     - convertFLoat is the string output.
     */   
-    char readAnalog(char * convertFloat);
+    char read_Analog(char * convertFloat);
     /*
     This function reads pressure from an I2C pressure transducer. 
     - FirstVal is the first base 256 byte.
@@ -93,7 +93,7 @@ public:
     - Temp is string value for the temperature in celsius. 
     - I2C_ADDRESS is the I2C address to read from.
     */   
-    char readI2CPressure(char * combVal, char * temp, int I2C_ADDRESS);
+    char read_Pressure(char * combVal, char * temp, int I2C_ADDRESS);
     /* ## NOTE: This function currently is not compatible with the meshlium.
     This function sends a data frame to the Meshlium. 
     - ConvertFloat is the Maxboxtix analog value. 
@@ -101,14 +101,14 @@ public:
     - Temp is the temperature value.
     - MAC_ADDRESS is the Mac Address of the desired gateway. 
     */   
-    int Rain_Guage_Send(char* convertFloat, char* combVal, char* temp, char* MAC_ADDRESS);
+    int rg_Send(char* convertFloat, char* combVal, char* temp, char* MAC_ADDRESS);
     /*
     This function writes a data frame to the SD card.  
     - ConvertFloat is the Maxboxtix analog value. 
     - CombVal is the the pressure value.
     - Temp is the temperature value.
     */   
-    void sdWrite(char* convertFloat, char* combVal, char* temp);
+    void write_SD(char* convertFloat, char* combVal, char* temp);
     /*
     This function takes two base 256 values and combines them into one decimal value. 
     After that, the value is converted into a string to be sent to the meshlium.
@@ -124,7 +124,10 @@ public:
     - MAC_ADDRESS is the Mac Address of the desired gateway. 
      */   
     int send_Frame(char* value, char* message, char* MAC_ADDRESS);
-
+    /*
+    This function sends the current battery level to a gateway.
+    - MAC_ADDRESS is the Mac Address of the desired gateway. 
+    */   
     int send_Batt(char* MAC_ADDRESS);
     
 };
