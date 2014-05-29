@@ -21,7 +21,7 @@ kjnucera@syr.edu
 
 #include "myLibrary.h"
 
-#define DEBUG 
+//#define DEBUG 
 
 
 /******************************************************************************
@@ -105,7 +105,7 @@ int myLibrary::Init(){ // Open the USB connection
   #ifdef DEBUG
     USB.println(F("-------------------------------")); 
   #endif
-}
+} 
 char myLibrary::readI2CPressure(char * combVal, char * temp, int I2C_ADDRESS){
   int val, firstVal, secondVal, thirdVal, Status, totalVal=0;
   // Read I2C Device
@@ -116,45 +116,45 @@ char myLibrary::readI2CPressure(char * combVal, char * temp, int I2C_ADDRESS){
       if ( i == 0 ){// makes sure we only get the status bits for the first byte
         Status = val >> 14; // shifts the value over by 14 bits so we can get the status bits
         if (Status != 0){ // checks the the first two status bits to make sure there are no issues.
-         #ifdef DEBUG
+        #ifdef DEBUG
           USB.println(F("Error! Data not valid"));
-         #endif
+        #endif
         }
         else{
           firstVal = val; // stores the first byte
-           #ifdef DEBUG
-           USB.print(F("FirstVal: "));
-           USB.println(firstVal);
-           #endif
+          #ifdef DEBUG
+            USB.print(F("FirstVal: "));
+            USB.println(firstVal);
+          #endif
         }   
       }
       else if (i == 1){
         secondVal = val; // stores the second byte
         #ifdef DEBUG
-         USB.print(F("SecondVal: "));
-         USB.println(secondVal);
+          USB.print(F("SecondVal: "));
+          USB.println(secondVal);
         #endif
       }
       else if ( i == 2){
         thirdVal = val; // stores the third byte
         #ifdef DEBUG
-         USB.print(F("temperature: "));
-         USB.println(thirdVal);
+          USB.print(F("temperature: "));
+          USB.println(thirdVal);
         #endif
       }
     } 
-   }
-   //Calculate the the total based on base 256
-   // convert totalval to a char variable named combVal
-   I2Ctemp(thirdVal, temp); //gets the temperature in fahrenheit
-   totalpressure2string(firstVal, secondVal, combVal);
-   //pressure2string(firstVal, secondVal, combVal); //gets RAW pressure value
-   #ifdef DEBUG
+  }
+  // Calculate the the total based on base 256
+  // convert totalval to a char variable named combVal
+  I2Ctemp(thirdVal, temp); //gets the temperature in fahrenheit
+  convert_Pressure(firstVal, secondVal, combVal);
+  //pressure2string(firstVal, secondVal, combVal); //gets RAW pressure value
+  #ifdef DEBUG
     USB.print(F("combVal: "));
     USB.println(combVal);
     USB.print(F("temp: "));
     USB.println(temp);
-   #endif
+  #endif
 }
 char myLibrary::pressure2string( int firstVal, int secondVal, char * combVal){
   // Converts 2 int bytes to char * and then concatenates them
@@ -165,7 +165,7 @@ char myLibrary::pressure2string( int firstVal, int secondVal, char * combVal){
    strcpy(combVal,nfv);
    strcat(combVal,nsv);
 }
-char myLibrary::convert_pressure( int firstVal, int secondVal, char * combVal){
+char myLibrary::convert_Pressure( int firstVal, int secondVal, char * combVal){
   // Converts 2 int bytes to char * and then concatenates them
    char newVar[10];
    int totalVal = 0;
