@@ -19,7 +19,7 @@ Add the custom sensors to the waspmote API
 Ask nick for a list of the different devices we'll be using
 Add a sensor type to the inputs of the various send functions.
 Move the send function into their respective functions.
-
+Use RTC.data/ RTC.TIME for the data frames
 
  */
 

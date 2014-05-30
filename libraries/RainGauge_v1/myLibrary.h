@@ -71,7 +71,7 @@ public:
     - temp is the final value.
     */   
     char convert_Temp( int val, char * temp);
-    /*
+    /* ## NOTE: Add selection for celsius/Fahrenheit
     This function converts floats to strings.
     - float f : a floating point value.
     - char* c : output string.
