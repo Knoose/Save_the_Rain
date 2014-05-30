@@ -14,7 +14,12 @@ Add classes for each specific device
   Maybe even make all partial classes so they inherit all the funcions.
 Add a debug flag for the user
   maybe make a public variable attached to the class
+  Also fix the current state of the debug flag
 Add the custom sensors to the waspmote API
+Ask nick for a list of the different devices we'll be using
+Add a sensor type to the inputs of the various send functions.
+Move the send function into their respective functions.
+
 
  */
 
