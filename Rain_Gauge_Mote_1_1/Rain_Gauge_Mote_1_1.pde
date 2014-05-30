@@ -34,7 +34,7 @@ char* Dist = "Dist_Sens";
 void setup() {
   myObject.Init();
   // Setting time [yy:mm:dd:dow:hh:mm:ss]
-  RTC.setTime("14:05:29:05:12:11:00");
+  RTC.setTime("14:05:30:05:12:11:00");
   #ifdef DEBUG
     USB.print(F("Setting time"));
   #endif
@@ -45,7 +45,6 @@ void loop() {
   PWR.setSensorPower(SENS_3V3,SENS_ON); 
   //5VDC Power
   //PWR.setSensorPower(SENS_5V,SENS_ON); 
-  delay(1000);
   /////////////////////////////////////////////////////////////  
   // 0. Declarations
   /////////////////////////////////////////////////////////////
@@ -57,24 +56,18 @@ void loop() {
   // 1. Getting Inputs
   /////////////////////////////////////////////////////////////
   //analog voltage between 0 - 3.3v (MAXBOTIX)
-  myObject.read_Analog(convertFloat);
+  //myObject.read_Analog(convertFloat);
   // Read I2C Device
   myObject.read_Pressure(combVal, temp, I2C_ADDRESS2);
   /////////////////////////////////////////////////////////////
   // 2. Send to Gateway
   /////////////////////////////////////////////////////////////
-  // frame.setFrameSize(125);
   // myObject.send2mesh(convertFloat,combVal, temp, MAC_ADDRESS);
-  error = myObject.send_Frame(combVal,pres_0, MAC_ADDRESS);
-  if (error != 1)
-    USB.println("Packet did not send");
-  delay(500);
-  error = myObject.send_Frame(temp,tempurature, MAC_ADDRESS);
-  if (error != 1)
-    USB.println("Packet did not send");
-  error = myObject.send_Batt(MAC_ADDRESS);
-  if (error != 1)
-    USB.println("Packet did not send");
+  myObject.send_Frame(combVal,pres_0, MAC_ADDRESS);
+  delay(1000);
+  myObject.send_Frame(temp,tempurature, MAC_ADDRESS);
+  delay(1000);
+  myObject.send_Batt(MAC_ADDRESS);
   /////////////////////////////////////////////////////////////
   // 3. Write to SD card only if the gateway is unavailable
   /////////////////////////////////////////////////////////////
@@ -82,8 +75,8 @@ void loop() {
   /////////////////////////////////////////////////////////////
   // 4. Sleep For Fifteen Minutes
   /////////////////////////////////////////////////////////////
-  delay(5000);
-  //PWR.deepSleep("00:00:15:00",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
+  // Days:Hours:Minutes:Seconds
+  //PWR.deepSleep("00:00:5:00",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
 }
 
 
