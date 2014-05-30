@@ -20,6 +20,8 @@ Ask nick for a list of the different devices we'll be using
 Add a sensor type to the inputs of the various send functions.
 Move the send function into their respective functions.
 Use RTC.data/ RTC.TIME for the data frames
+Figure out a a way to get the computer time and put it into the RTC function. 
+Also write code to allow OTA/ The meshlium to update the time of each of the waspmotes
 
  */
 
