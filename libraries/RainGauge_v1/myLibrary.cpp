@@ -8,6 +8,14 @@ Rain Gauge Library v1.1
 By: Kyle Nucera
 kjnucera@syr.edu
 
+
+# To Do:
+Add classes for each specific device
+  Maybe even make all partial classes so they inherit all the funcions.
+Add a debug flag for the user
+  maybe make a public variable attached to the class
+Add the custom sensors to the waspmote API
+
  */
 
 /******************************************************************************
@@ -29,7 +37,8 @@ kjnucera@syr.edu
  ******************************************************************************/
 myLibrary::myLibrary(){
 }  
-int myLibrary::Init(){ // Open the USB connection
+int myLibrary::Init(){ 
+  // Open the USB connection
   // define folder and file to store data ( SD CARD )
   char* path="/data";
   char* filename="/data/log";
@@ -146,7 +155,7 @@ char myLibrary::read_Pressure(char * combVal, char * temp, int I2C_ADDRESS){
   }
   // Calculate the the total based on base 256
   // convert totalval to a char variable named combVal
-  I2Ctemp(thirdVal, temp); //gets the temperature in fahrenheit
+  convert_Temp(thirdVal, temp); //gets the temperature in fahrenheit
   convert_Pressure(firstVal, secondVal, combVal);
   //pressure2string(firstVal, secondVal, combVal); //gets RAW pressure value
   #ifdef DEBUG
@@ -166,7 +175,7 @@ char myLibrary::pressure2string( int firstVal, int secondVal, char * combVal){
    strcat(combVal,nsv);
 }
 char myLibrary::convert_Pressure( int firstVal, int secondVal, char * combVal){
-  // Converts 2 int bytes to char * and then concatenates them
+   // Converts 2 int bytes to char * and then concatenates them
    char newVar[10];
    int totalVal = 0;
    totalVal = firstVal * 256 + secondVal; 
@@ -191,7 +200,7 @@ char myLibrary::convert_Temp( int val, char * temp){
    float2string(cTemp,temp,3);
 }
 int myLibrary::float2string(float f, char* c, uint8_t prec){
-// float value, where you want to store it, how many decimal places you want
+  // float value, where you want to store it, how many decimal places you want
   int fix = 1;
   int p = f;
   f -= p;
@@ -260,7 +269,7 @@ int myLibrary::send_Frame(char* value, char* message, char* MAC_ADDRESS){
   // Create new frame (ASCII)
   frame.createFrame(ASCII,message); 
   // add frame field (String message) that writes the date and time
-  //frame.addSensor(SENSOR_STR, RTC.getTime());
+  frame.addSensor(SENSOR_STR, RTC.getTime());
   // add frame field (String message) writes the analog voltage to the SD card
   frame.addSensor(SENSOR_STR, (char *) value);
   // add frame field (Battery level)
@@ -282,6 +291,9 @@ int myLibrary::send_Frame(char* value, char* message, char* MAC_ADDRESS){
   }
   else
   {
+    #ifdef DEBUG
+      USB.println("Didn't send value.");
+    #endif
     free(packet);
     packet=NULL;
     return 0;
@@ -315,6 +327,7 @@ void myLibrary::write_SD(char* convertFloat, char* combVal, char* temp){
     else USB.println(F("append failed"));
 }
 int myLibrary::send_Batt(char* MAC_ADDRESS){
+  // Creates a packet to send
   packetXBee* packet; 
   // Create new frame (ASCII)
   frame.createFrame(ASCII,"Battery Level"); 
@@ -335,12 +348,48 @@ int myLibrary::send_Batt(char* MAC_ADDRESS){
   }
   else
   {
+    #ifdef DEBUG
+      USB.println("Didn't send value.");
+    #endif
     free(packet);
     packet=NULL;
     return 0;
   }
 }
-
+int myLibrary::send_InTemp(char* MAC_ADDRESS){
+    // Creates a packet to send
+    packetXBee* packet; 
+    // Create new frame (ASCII)
+    frame.createFrame(ASCII,"Hop_Node"); 
+    // add frame field (String message) that writes the date and time
+    frame.addSensor(SENSOR_STR, RTC.getTime());
+    // get onboard temperature
+    frame.addSensor(SENSOR_IN_TEMP,(float) RTC.getTemperature());
+    // Memory allocation
+    packet=(packetXBee*) calloc(1,sizeof(packetXBee)); 
+    // Choose transmission mode: UNICAST or BROADCAST
+    packet->mode=UNICAST; 
+    // set destination XBee parameters to packet
+    xbeeDM.setDestinationParams(packet, MAC_ADDRESS, frame.buffer, frame.length); 
+    // send XBee packet
+    xbeeDM.sendXBee(packet);
+    // check TX flag
+    if( xbeeDM.error_TX == 0 )
+    {
+      free(packet);
+      packet=NULL;
+      return 1;
+    }
+    else
+    {
+      #ifdef DEBUG
+        USB.println("Didn't send value.");
+      #endif 
+      free(packet);
+      packet=NULL;
+      return 0;
+    }
+}
 
 /// Preinstantiate Objects /////////////////////////////////////////////////////
 myLibrary myObject = myLibrary();
