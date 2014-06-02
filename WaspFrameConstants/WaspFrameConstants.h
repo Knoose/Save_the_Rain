@@ -448,7 +448,7 @@ const uint8_t SENSOR_FIELD_TABLE[] PROGMEM=
 
 	// RFID
 	1, //str_UID		// 68
-	1  //str_RB			// 69
+	1,  //str_RB			// 69
 
 	// Save The Rain Custom Sensors
 	1, 		// 70 air temperature
@@ -559,7 +559,7 @@ const uint8_t DECIMAL_TABLE[] PROGMEM =
 
 	// RFID
 	0, //str_UID		// 68
-	0  //str_RB			// 69
+	0,  //str_RB			// 69
 	
 	// Save The Rain Custom Sensors
 	0, 		// 70 air temperature
