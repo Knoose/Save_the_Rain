@@ -335,7 +335,7 @@ const uint8_t SENSOR_TYPE_TABLE[] PROGMEM=
 
 	// RFID
 	3,	//str_UID		// 68
-	3	//str_RB		// 69
+	3,	//str_RB		// 69
 	
 	// Save The Rain Custom Sensors
 	3, 		// 70 air temperature
