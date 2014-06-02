@@ -1,3 +1,10 @@
+
+/*********************************************
+
+WARNING! This program will not work with any library version updated June 1st, 2014. 
+
+***********************************************/
+
 // Waspmote Pro V1.2 
 // Save The Rain Project:
 // Rain Gauge v1.1
