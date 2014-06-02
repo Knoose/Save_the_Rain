@@ -42,9 +42,9 @@ Also write code to allow OTA/ The meshlium to update the time of each of the was
 /******************************************************************************
  * PUBLIC FUNCTIONS
  ******************************************************************************/
-myLibrary::myLibrary(){
+Rain_Gauge::Rain_Gauge(){
 }  
-int myLibrary::Init(){ 
+int Rain_Gauge::Init(){ 
   // Open the USB connection
   // define folder and file to store data ( SD CARD )
   char* path="/data";
@@ -122,7 +122,7 @@ int myLibrary::Init(){
     USB.println(F("-------------------------------")); 
   #endif
 } 
-char myLibrary::read_Pressure(char * combVal, char * temp, int I2C_ADDRESS){
+char Rain_Gauge::read_Pressure(char * combVal, char * temp, int I2C_ADDRESS){
   int val, firstVal, secondVal, thirdVal, Status, totalVal=0;
   // Read I2C Device
   Wire.requestFrom(I2C_ADDRESS, 3);
@@ -172,7 +172,7 @@ char myLibrary::read_Pressure(char * combVal, char * temp, int I2C_ADDRESS){
     USB.println(temp);
   #endif
 }
-char myLibrary::pressure2string( int firstVal, int secondVal, char * combVal){
+char Rain_Gauge::pressure2string( int firstVal, int secondVal, char * combVal){
   // Converts 2 int bytes to char * and then concatenates them
    char nfv[10];
    char nsv[10];
@@ -181,7 +181,7 @@ char myLibrary::pressure2string( int firstVal, int secondVal, char * combVal){
    strcpy(combVal,nfv);
    strcat(combVal,nsv);
 }
-char myLibrary::convert_Pressure( int firstVal, int secondVal, char * combVal){
+char Rain_Gauge::convert_Pressure( int firstVal, int secondVal, char * combVal){
    // Converts 2 int bytes to char * and then concatenates them
    char newVar[10];
    int totalVal = 0;
@@ -189,7 +189,7 @@ char myLibrary::convert_Pressure( int firstVal, int secondVal, char * combVal){
    sprintf((char*)newVar, "%i\0",totalVal);
    strcpy(combVal,newVar);
 }
-char myLibrary::convert_Temp( int val, char * temp){
+char Rain_Gauge::convert_Temp( int val, char * temp){
   float cTemp, fTemp;
    val = val << 3; // shift the temperature to the left by 3 bits
   // Determines the Temperature in celsius 
@@ -206,7 +206,7 @@ char myLibrary::convert_Temp( int val, char * temp){
    //converts int to char *
    float2string(cTemp,temp,3);
 }
-int myLibrary::float2string(float f, char* c, uint8_t prec){
+int Rain_Gauge::float2string(float f, char* c, uint8_t prec){
   // float value, where you want to store it, how many decimal places you want
   int fix = 1;
   int p = f;
@@ -225,13 +225,13 @@ int myLibrary::float2string(float f, char* c, uint8_t prec){
   else
     sprintf(c, "%i.%i\0",p,q);
 }
-char myLibrary::read_Analog(char * convertFloat){
+char Rain_Gauge::read_Analog(char * convertFloat){
   float val1 = analogRead(ANALOG1);
   val1 = (val1/1023) *5;
   //function to convert floating point numbers to integers
   float2string(val1, convertFloat, 3);
 }
-int myLibrary::rg_Send(char* convertFloat, char* combVal, char* temp, char* MAC_ADDRESS){
+int Rain_Gauge::rg_Send(char* convertFloat, char* combVal, char* temp, char* MAC_ADDRESS){
   // Create the packet that we will send wirelessly
   packetXBee* packet; 
   // Create new frame (ASCII)
@@ -271,7 +271,7 @@ int myLibrary::rg_Send(char* convertFloat, char* combVal, char* temp, char* MAC_
     return 0;
   }
 }
-int myLibrary::send_Frame(char* value, char* message, char* MAC_ADDRESS){
+int Rain_Gauge::send_Frame(char* value, char* message, char* MAC_ADDRESS){
   packetXBee* packet; 
   // Create new frame (ASCII)
   frame.createFrame(ASCII,message); 
@@ -306,7 +306,7 @@ int myLibrary::send_Frame(char* value, char* message, char* MAC_ADDRESS){
     return 0;
   }
 }
-void myLibrary::write_SD(char* convertFloat, char* combVal, char* temp){
+void Rain_Gauge::write_SD(char* convertFloat, char* combVal, char* temp){
   char* path="/data";
   char* filename="/data/log";
   SD.ON();
@@ -333,7 +333,7 @@ void myLibrary::write_SD(char* convertFloat, char* combVal, char* temp){
   if(SD.appendln(filename, frame.buffer, frame.length)) USB.println(F("append ok"));
     else USB.println(F("append failed"));
 }
-int myLibrary::send_Batt(char* MAC_ADDRESS){
+int Rain_Gauge::send_Batt(char* MAC_ADDRESS){
   // Creates a packet to send
   packetXBee* packet; 
   // Create new frame (ASCII)
@@ -363,7 +363,7 @@ int myLibrary::send_Batt(char* MAC_ADDRESS){
     return 0;
   }
 }
-int myLibrary::send_InTemp(char* MAC_ADDRESS){
+int Rain_Gauge::send_InTemp(char* MAC_ADDRESS){
     // Creates a packet to send
     packetXBee* packet; 
     // Create new frame (ASCII)
@@ -399,4 +399,4 @@ int myLibrary::send_InTemp(char* MAC_ADDRESS){
 }
 
 /// Preinstantiate Objects /////////////////////////////////////////////////////
-myLibrary myObject = myLibrary();
+Rain_Gauge RainGauge = Rain_Gauge();

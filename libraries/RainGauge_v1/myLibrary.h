@@ -40,7 +40,7 @@ kjnucera@syr.edu
 /*
   defines all the variables and functions used 
 */
-class myLibrary
+class Rain_Gauge
 {
   /// public methods and attributes ////////////
 public:
@@ -50,7 +50,7 @@ public:
   	- param void
   	- return void
     */ 
-    myLibrary();
+    Rain_Gauge();
     /*
     It initalizes all the necessary variables and Waspmote functionality.
     - Sets PANID.
@@ -136,6 +136,6 @@ public:
     int send_InTemp(char* MAC_ADDRESS);
     
 };
-extern myLibrary	myObject;
+extern Rain_Gauge	RainGauge;
 
 #endif
