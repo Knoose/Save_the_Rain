@@ -1,6 +1,6 @@
 // Waspmote Pro V1.2 
 // Save The Rain Project:
-// Rain Gauge v1.1
+// Rain Gauge v1.2
 // By: Kyle Nucera
 // kjnucera@syr.edu
 
@@ -9,8 +9,8 @@
 #include <myLibrary.h>
 #include <WaspFrame.h>
 
-// comment out this line to remove the serial prints
-//#define DEBUG 
+// Change to false to disable debugging.
+bool debug_Mode = true;
 
 // Gateway Mac Addresses ( Wireless Communication )
 char* MAC_ADDRESS="0013A20040794BAD"; // new meshlium
@@ -23,21 +23,16 @@ int I2C_ADDRESS2 = 72; // Address 0x48
 int I2C_ADDRESS3 = 88; // Address 0x58
 int I2C_ADDRESS4 = 104; //Address 0x68
 
-//Global Names for the values we're sending
-char* pres_0 = "RG"; // Rain Gauge Pressure
-char* pres_1 = "P1"; //
-char* pres_2 = "P2"; // 
-char* pres_3 = "P3"; // 
-char* tempurature = "Temp"; // Rain Guage Temperature reading
-char* Dist = "Dist_Sens";
+//Global Names for the location we're sending from
+char* loc_0 = "Link+";
 
 void setup() {
-  myObject.Init();
+  RainGauge.set_Debug(debug_Mode);
+  RainGauge.Init();
   // Setting time [yy:mm:dd:dow:hh:mm:ss]
   RTC.setTime("14:05:30:05:12:11:00");
-  #ifdef DEBUG
+  if (debug_Mode)
     USB.print(F("Setting time"));
-  #endif
 }
 
 void loop() {
@@ -58,20 +53,20 @@ void loop() {
   //analog voltage between 0 - 3.3v (MAXBOTIX)
   //myObject.read_Analog(convertFloat);
   // Read I2C Device
-  myObject.read_Pressure(combVal, temp, I2C_ADDRESS2);
+  RainGauge.read_Pressure(combVal, temp, I2C_ADDRESS2);
   /////////////////////////////////////////////////////////////
   // 2. Send to Gateway
   /////////////////////////////////////////////////////////////
   // myObject.send2mesh(convertFloat,combVal, temp, MAC_ADDRESS);
-  myObject.send_Frame(combVal,pres_0, MAC_ADDRESS);
+  RainGauge.send_Frame(combVal,loc_0, MAC_ADDRESS);
   delay(1000);
-  myObject.send_Frame(temp,tempurature, MAC_ADDRESS);
+  RainGauge.send_Frame(temp,loc_0, MAC_ADDRESS);
   delay(1000);
-  myObject.send_Batt(MAC_ADDRESS);
+  RainGauge.send_Batt(MAC_ADDRESS);
   /////////////////////////////////////////////////////////////
   // 3. Write to SD card only if the gateway is unavailable
   /////////////////////////////////////////////////////////////
-  myObject.write_SD(convertFloat,combVal, temp);
+  RainGauge.write_SD(convertFloat,combVal, temp);
   /////////////////////////////////////////////////////////////
   // 4. Sleep For Fifteen Minutes
   /////////////////////////////////////////////////////////////

@@ -9,32 +9,28 @@
 #include <myLibrary.h>
 #include <WaspFrame.h>
 
-// comment out this line to remove the serial prints
-//#define DEBUG 
+// Change to false to disable debugging.
+bool debug_Mode = true;
 
 //char* MAC_ADDRESS="0013A200408DE558"; // DA MESHLIUM first
 char* MAC_ADDRESS="0013A20040794BAD"; // new meshlium
 //char* MAC_ADDRESS="0013A20040788EE2"; // kyle's usb gateway
 //char* MAC_ADDRESS="0013A20040896768"; // Nick's USB gateway
 
-
 packetXBee* packet; 
  
 void setup()
 {
-  myObject.Init();
+  HopNode.set_Debug(debug_Mode);
+  HopNode.Init();
   // Setting time [yy:mm:dd:dow:hh:mm:ss]
   RTC.setTime("14:05:29:05:12:11:00");
-  #ifdef DEBUG
+  if (debug_Mode)
     USB.print(F("Setting time"));
-  #endif
 }
 
 void loop(){
-  int error = 0;
-  error = myObject.send_InTemp(MAC_ADDRESS);
-  if (error != 1)
-    USB.println("Packet did not send");
+  HopNode.send_InTemp(MAC_ADDRESS);
   // send the battery level
   delay(1000);
   

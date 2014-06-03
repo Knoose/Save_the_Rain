@@ -58,12 +58,21 @@ public:
     - Creates a path to write on the SD card.
     */   
     int Init();
+    // A boolean value to let a user decide to debug or not. 
+    bool debug; 
     /*
-    This function converts and combines pressure values in a string.
-    - firstVal, secondVal are integers that represent base 256 numbers.
-    - Combval is the Combined value of firstVal and secondVal.
+    // This function sets the debugging mode for the main program.
+    - value is a true/false value inputted by the user. 
+    */
+    bool set_Debug(bool value);   
+    /*
+    This function takes two base 256 values and combines them into one decimal value. 
+    After that, the value is converted into a string to be sent to the meshlium.
+    - FirstVal is the first base 256 byte.
+    - SecondVal is the second base 256 byte.
+    - CombVal is the combined string value of firstVal & secondVal. 
     */   
-    char pressure2string( int firstVal, int secondVal, char * combVal);
+    char convert_Pressure(int firstVal, int secondVal, char * combVal);
     /* ## NOTE: Add selection for celsius/Fahrenheit
     This function determines the outside temperature of the presure transducer in celsius.
     - val is the RAW temperature value.
@@ -78,6 +87,12 @@ public:
     - unint8_t prec : Number of decimal places.
     */   
     int float2string(float f, char* c, uint8_t prec);
+    /*
+    This function converts and combines pressure values in a string.
+    - firstVal, secondVal are integers that represent base 256 numbers.
+    - Combval is the Combined value of firstVal and secondVal.
+    */
+    char pressure2string( int firstVal, int secondVal, char * combVal);
     /*
     This function reads an analog value from ANALOG1.
     - The analog value is converted from float to string.
@@ -94,29 +109,11 @@ public:
     - I2C_ADDRESS is the I2C address to read from.
     */   
     char read_Pressure(char * combVal, char * temp, int I2C_ADDRESS);
-    /* ## NOTE: This function currently is not compatible with the meshlium.
-    This function sends a data frame to the Meshlium. 
-    - ConvertFloat is the Maxboxtix analog value. 
-    - CombVal is the the pressure value.
-    - Temp is the temperature value.
+    /*
+    This function sends the current battery level to a gateway.
     - MAC_ADDRESS is the Mac Address of the desired gateway. 
     */   
-    int rg_Send(char* convertFloat, char* combVal, char* temp, char* MAC_ADDRESS);
-    /*
-    This function writes a data frame to the SD card.  
-    - ConvertFloat is the Maxboxtix analog value. 
-    - CombVal is the the pressure value.
-    - Temp is the temperature value.
-    */   
-    void write_SD(char* convertFloat, char* combVal, char* temp);
-    /*
-    This function takes two base 256 values and combines them into one decimal value. 
-    After that, the value is converted into a string to be sent to the meshlium.
-    - FirstVal is the first base 256 byte.
-    - SecondVal is the second base 256 byte.
-    - CombVal is the combined string value of firstVal & secondVal. 
-    */   
-    char convert_Pressure(int firstVal, int secondVal, char * combVal);
+    int send_Batt(char* MAC_ADDRESS);
     /*
     This function sends one string value to a gateway.
     - Message is a way to define what you're sending.
@@ -124,18 +121,42 @@ public:
     - MAC_ADDRESS is the Mac Address of the desired gateway. 
      */   
     int send_Frame(char* value, char* message, char* MAC_ADDRESS);
-    /*
-    This function sends the current battery level to a gateway.
+    /* ## NOTE: This function currently is not compatible with the meshlium.
+    This function sends a data frame to the Meshlium. 
+    - ConvertFloat is the Maxboxtix analog value. 
+    - CombVal is the the pressure value.
+    - Temp is the temperature value.
     - MAC_ADDRESS is the Mac Address of the desired gateway. 
     */   
-    int send_Batt(char* MAC_ADDRESS);
+    int send_RG(char* convertFloat, char* combVal, char* temp, char* MAC_ADDRESS);
+    /*
+    This function writes a data frame to the SD card.  
+    - ConvertFloat is the Maxboxtix analog value. 
+    - CombVal is the the pressure value.
+    - Temp is the temperature value.
+    */   
+    void write_SD(char* convertFloat, char* combVal, char* temp);
+ 
+};
+extern Rain_Gauge	RainGauge;
+
+class Hop_Node : public Rain_Gauge
+{
+    public:
+    /*
+    Class Constructor:
+    Initialize the class attributes
+    - param void
+    - return void
+    */ 
+    Hop_Node();
+
     /*
     This function sends the internal temperature level to a gateway.
     - MAC_ADDRESS is the Mac Address of the desired gateway. 
     */   
     int send_InTemp(char* MAC_ADDRESS);
-    
 };
-extern Rain_Gauge	RainGauge;
+extern Hop_Node   HopNode;
 
 #endif
