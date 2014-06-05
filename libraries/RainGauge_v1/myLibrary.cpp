@@ -109,7 +109,7 @@ int Rain_Gauge::Init(){
 bool Rain_Gauge::set_Debug(bool value){
   debug = value;
 }
-char Rain_Gauge::convert_Pressure( int firstVal, int secondVal, char * combVal){
+char Rain_Gauge::convert_Pressure(int firstVal, int secondVal, char * combVal){
    // Converts 2 int bytes to char * and then concatenates them
    char newVar[10];
    int totalVal = 0;
@@ -117,7 +117,7 @@ char Rain_Gauge::convert_Pressure( int firstVal, int secondVal, char * combVal){
    sprintf((char*)newVar, "%i\0",totalVal);
    strcpy(combVal,newVar);
 }
-char Rain_Gauge::convert_Temp( int val, char * temp){
+char Rain_Gauge::convert_Temp(int val, char * temp){
   float cTemp, fTemp;
    val = val << 3; // shift the temperature to the left by 3 bits
   // Determines the Temperature in celsius 
@@ -153,7 +153,7 @@ int Rain_Gauge::float2string(float f, char* c, uint8_t prec){
   else
     sprintf(c, "%i.%i\0",p,q);
 }
-char Rain_Gauge::pressure2string( int firstVal, int secondVal, char * combVal){
+char Rain_Gauge::pressure2string(int firstVal, int secondVal, char * combVal){
   // Converts 2 int bytes to char * and then concatenates them
    char nfv[10];
    char nsv[10];
@@ -252,12 +252,12 @@ int Rain_Gauge::send_Frame(char* value, char* message, char* MAC_ADDRESS){
   packetXBee* packet; 
   // Create new frame (ASCII)
   frame.createFrame(ASCII,message); 
-  // add frame field (String message) that writes the date and time
-  frame.addSensor(SENSOR_STR, RTC.getTime());
+  // add frame field (DATE) that writes the current date
+  frame.addSensor(SENSOR_DATE, RTC.month, RTC.day , RTC.year);
+  // add frame field (Time) that write the current time
+  frame.addSensor(SENSOR_TIME, RTC.hour, RTC.minute, RTC.second);
   // add frame field (String message) writes the analog voltage to the SD card
   frame.addSensor(SENSOR_STR, (char *) value);
-  // add frame field (Battery level)
-  //frame.addSensor(SENSOR_BAT, (uint8_t) PWR.getBatteryLevel());
   // Send To Gateway ( I.E. Meshlium ) 
   packet=(packetXBee*) calloc(1,sizeof(packetXBee)); 
   // Choose transmission mode: UNICAST or BROADCAST
