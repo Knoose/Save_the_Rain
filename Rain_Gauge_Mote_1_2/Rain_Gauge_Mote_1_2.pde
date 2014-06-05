@@ -9,7 +9,7 @@
 #include <myLibrary.h>
 #include <WaspFrame.h>
 
-// Change to false to disable debugging.
+// Change to false to disable debugging. Vise-Versa is true.
 bool debug_Mode = true;
 
 // Gateway Mac Addresses ( Wireless Communication )
@@ -71,7 +71,7 @@ void loop() {
   // 4. Sleep For Fifteen Minutes
   /////////////////////////////////////////////////////////////
   // Days:Hours:Minutes:Seconds
-  //PWR.deepSleep("00:00:5:00",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
+  //PWR.deepSleep("00:00:05:00",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
 }
 
 
