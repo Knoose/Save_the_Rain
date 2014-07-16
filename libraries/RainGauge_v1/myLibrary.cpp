@@ -350,6 +350,8 @@ void Rain_Gauge::write_SD(char* convertFloat, char* combVal, char* temp){
   frame.addSensor(SENSOR_BAT, (uint8_t) PWR.getBatteryLevel());
   if(SD.appendln(filename, frame.buffer, frame.length)) USB.println(F("append ok"));
     else USB.println(F("append failed"));
+    delay(500);
+  SD.OFF();
 }
 
 /******************************************************************************
