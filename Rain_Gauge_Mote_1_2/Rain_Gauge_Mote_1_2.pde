@@ -39,11 +39,11 @@ void loop() {
   // 3.3VDC Power
   PWR.setSensorPower(SENS_3V3,SENS_ON); 
   //5VDC Power
-  //PWR.setSensorPower(SENS_5V,SENS_ON); 
+  PWR.setSensorPower(SENS_5V,SENS_ON); 
   /////////////////////////////////////////////////////////////  
   // 0. Declarations
   /////////////////////////////////////////////////////////////
-  char convertFloat[10];
+  char convertFloat[10] = "000000000";
   char combVal[7];
   char temp[5];
   int error = 0;
@@ -57,6 +57,12 @@ void loop() {
   // Read I2C Device
   RainGauge.read_Pressure(combVal, temp, I2C_ADDRESS2);
   PWR.setWatchdog( WTD_OFF, WTD_8S);
+  if( intFlag & WTD_INT )
+  {
+    Wire.close(); 
+    delay(500);
+    Wire.begin();
+  }
   clearIntFlag();
   PWR.clearInterruptionPin(); 
   /////////////////////////////////////////////////////////////
