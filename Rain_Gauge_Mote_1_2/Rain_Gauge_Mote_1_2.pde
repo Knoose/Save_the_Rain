@@ -52,8 +52,13 @@ void loop() {
   /////////////////////////////////////////////////////////////
   //analog voltage between 0 - 3.3v (MAXBOTIX)
   //myObject.read_Analog(convertFloat);
+  
+  PWR.setWatchdog( WTD_ON, WTD_8S);
   // Read I2C Device
   RainGauge.read_Pressure(combVal, temp, I2C_ADDRESS2);
+  PWR.setWatchdog( WTD_OFF, WTD_8S);
+  clearIntFlag();
+  PWR.clearInterruptionPin(); 
   /////////////////////////////////////////////////////////////
   // 2. Send to Gateway
   /////////////////////////////////////////////////////////////
