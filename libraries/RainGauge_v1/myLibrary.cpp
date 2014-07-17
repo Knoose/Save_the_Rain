@@ -324,7 +324,7 @@ int Rain_Gauge::send_RG(char* convertFloat, char* combVal, char* temp, char* MAC
     return 0;
   }
 }
-void Rain_Gauge::write_SD(char* convertFloat, char* combVal, char* temp){
+void Rain_Gauge::write_SD(char* convertFloat, char* combVal, char* temp, char* message){
   char* path="/data";
   char* filename="/data/log";
   SD.ON();
@@ -337,7 +337,7 @@ void Rain_Gauge::write_SD(char* convertFloat, char* combVal, char* temp){
   // define folder and file to store data ( SD CARD )
 
   // Create new frame (ASCII)
-  frame.createFrame(ASCII,"Datalogging V1.1"); 
+  frame.createFrame(ASCII,message); 
   // add frame field (String message) that writes the date and time
   frame.addSensor(SENSOR_STR, RTC.getTime());
   // add frame field (String message) writes the analog voltage to the SD card
