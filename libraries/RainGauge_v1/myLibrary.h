@@ -135,7 +135,7 @@ public:
     - CombVal is the the pressure value.
     - Temp is the temperature value.
     */   
-    void write_SD(char* convertFloat, char* combVal, char* temp);
+    void write_SD(char* convertFloat, char* combVal, char* temp, char* message);
  
 };
 extern Rain_Gauge	RainGauge;
