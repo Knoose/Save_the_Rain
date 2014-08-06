@@ -10,12 +10,17 @@
 #include <WaspFrame.h>
 
 // Change to false to disable debugging.
-bool debug_Mode = true;
+bool debug_Mode = false;
 
 //char* MAC_ADDRESS="0013A200408DE558"; // DA MESHLIUM first
-//char* MAC_ADDRESS="0013A20040794BAD"; // new meshlium
-char* MAC_ADDRESS="0013A20040788EE2"; // kyle's usb gateway
+char* MAC_ADDRESS="0013A20040794BAD"; // new meshlium
+//char* MAC_ADDRESS="0013A20040788EE2"; // kyle's usb gateway
 //char* MAC_ADDRESS="0013A20040896768"; // Nick's USB gateway
+
+char* loc_0 = "link+_HN";
+char* loc_1 = "NewHouse_HN";
+char* loc_2 = "Bird_HN";
+
 
 packetXBee* packet; 
  
