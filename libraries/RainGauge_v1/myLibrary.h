@@ -155,7 +155,7 @@ class Hop_Node : public Rain_Gauge
     This function sends the internal temperature level to a gateway.
     - MAC_ADDRESS is the Mac Address of the desired gateway. 
     */   
-    int send_InTemp(char* MAC_ADDRESS);
+    int send_InTemp(char* MAC_ADDRESS, char* message);
 };
 extern Hop_Node   HopNode;
 
