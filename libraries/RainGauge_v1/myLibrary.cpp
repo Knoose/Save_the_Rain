@@ -359,11 +359,11 @@ void Rain_Gauge::write_SD(char* convertFloat, char* combVal, char* temp, char* m
  ******************************************************************************/
 Hop_Node::Hop_Node(){
 }
-int Hop_Node::send_InTemp(char* MAC_ADDRESS){
+int Hop_Node::send_InTemp(char* MAC_ADDRESS, char* message){
    // Creates a packet to send
     packetXBee* packet; 
     // Create new frame (ASCII)
-    frame.createFrame(ASCII,"Hop_Node"); 
+    frame.createFrame(ASCII,message); 
     // add frame field (String message) that writes the date and time
     frame.addSensor(SENSOR_STR, RTC.getTime());
     // get onboard temperature
