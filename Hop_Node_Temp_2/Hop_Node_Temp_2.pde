@@ -18,7 +18,8 @@ char* MAC_ADDRESS="0013A20040794BAD"; // new meshlium
 //char* MAC_ADDRESS="0013A20040896768"; // Nick's USB gateway
 //char* MAC_ADDRESS="0013A20040676BE0"; // LAB usb gateway
 
-char* loc_00 = "delay_test";
+//Locations for our Nodes
+char* loc_00 = "Test_HN";
 char* loc_0 = "link+_HN";
 char* loc_1 = "NH_HN_E";
 char* loc_2 = "Bird_HN_S";
@@ -33,11 +34,11 @@ void setup()
   HopNode.set_Debug(debug_Mode);
   HopNode.Init();
   // Setting time [yy:mm:dd:dow:hh:mm:ss] 
-  // Sunday = 01, Monday = 02, ...
-  // hours are in a 1-24 format.
+    // Sunday = 01, Monday = 02, ...
+    // hours are in a 1-24 format.
   RTC.setTime("14:08:08:06:08:34:00");
   if (debug_Mode)
-    USB.print(F("Setting time"));
+    USB.println("Setting time");
 }
 
 void loop(){
@@ -45,11 +46,10 @@ void loop(){
   HopNode.send_InTemp(MAC_ADDRESS, loc_00);
   // frame.showFrame();
   // send the battery level
-  HopNode.send_Batt(MAC_ADDRESS);
+  HopNode.send_Batt(MAC_ADDRESS, loc_00);
   delay(500);
    // Go to sleep for an hour disconnecting all the switches and modules
    // Format:   "Days:Hours:Minutes:Seconds"
-   PWR.deepSleep("00:00:00:20",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
+   PWR.deepSleep("00:00:15:00",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
    delay(2000);
-   //USB.ON();
 }

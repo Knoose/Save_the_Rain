@@ -217,13 +217,13 @@ char Rain_Gauge::read_Pressure(char * combVal, char * temp, int I2C_ADDRESS){
     USB.println(temp);
   #endif
 }
-int Rain_Gauge::send_Batt(char* MAC_ADDRESS){
+int Rain_Gauge::send_Batt(char* MAC_ADDRESS, char* message){
   // Added to fix the only send once error
   xbeeDM.ON();
   // Creates a packet to send
   packetXBee* packet; 
   // Create new frame (ASCII)
-  frame.createFrame(ASCII,"Battery Level"); 
+  frame.createFrame(ASCII, message); 
   frame.addSensor(SENSOR_BAT, PWR.getBatteryLevel()); 
   packet=(packetXBee*) calloc(1,sizeof(packetXBee)); 
   // Choose transmission mode: UNICAST or BROADCAST

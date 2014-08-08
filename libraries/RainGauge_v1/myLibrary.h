@@ -113,7 +113,7 @@ public:
     This function sends the current battery level to a gateway.
     - MAC_ADDRESS is the Mac Address of the desired gateway. 
     */   
-    int send_Batt(char* MAC_ADDRESS);
+    int send_Batt(char* MAC_ADDRESS, char* message);
     /*
     This function sends one string value to a gateway.
     - Message is a way to define what you're sending.
