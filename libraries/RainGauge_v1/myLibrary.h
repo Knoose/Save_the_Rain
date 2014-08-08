@@ -98,7 +98,7 @@ public:
     - The analog value is converted from float to string.
     - convertFLoat is the string output.
     */   
-    char read_Analog(char * convertFloat);
+    char read_Analog(char * convertFloat, double volt_level);
     /*
     This function reads pressure from an I2C pressure transducer. 
     - FirstVal is the first base 256 byte.

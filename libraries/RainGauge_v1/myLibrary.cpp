@@ -162,9 +162,9 @@ char Rain_Gauge::pressure2string(int firstVal, int secondVal, char * combVal){
    strcpy(combVal,nfv);
    strcat(combVal,nsv);
 }
-char Rain_Gauge::read_Analog(char * convertFloat){
+char Rain_Gauge::read_Analog(char * convertFloat, double volt_level){
   float val1 = analogRead(ANALOG1);
-  val1 = (val1/1023) *5;
+  val1 = (val1/1023) * volt_level;
   //function to convert floating point numbers to integers
   float2string(val1, convertFloat, 3);
 }
