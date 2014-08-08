@@ -25,6 +25,8 @@ int I2C_ADDRESS4 = 104; //Address 0x68
 
 //Global Names for the location we're sending from
 char* loc_0 = "Link+";
+char* loc_3 = "Bird_HN_W";
+
 
 void setup() {
   RainGauge.set_Debug(debug_Mode);
