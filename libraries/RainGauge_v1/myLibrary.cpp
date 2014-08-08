@@ -218,6 +218,8 @@ char Rain_Gauge::read_Pressure(char * combVal, char * temp, int I2C_ADDRESS){
   #endif
 }
 int Rain_Gauge::send_Batt(char* MAC_ADDRESS){
+  // Added to fix the only send once error
+  xbeeDM.ON();
   // Creates a packet to send
   packetXBee* packet; 
   // Create new frame (ASCII)
@@ -249,6 +251,9 @@ int Rain_Gauge::send_Batt(char* MAC_ADDRESS){
   }
 }
 int Rain_Gauge::send_Frame(char* value, char* message, char* MAC_ADDRESS){
+  // Added to fix the only send once error
+  xbeeDM.ON();
+  // Create the packet that we will send wirelessly
   packetXBee* packet; 
   // Create new frame (ASCII)
   frame.createFrame(ASCII,message); 
@@ -266,25 +271,28 @@ int Rain_Gauge::send_Frame(char* value, char* message, char* MAC_ADDRESS){
   xbeeDM.setDestinationParams(packet, MAC_ADDRESS, frame.buffer, frame.length); 
   // send XBee packet
   xbeeDM.sendXBee(packet);
+  delay(1000);
+  //clear data packet
+  free(packet);
+  packet=NULL;
   // check TX flag
   if( xbeeDM.error_TX == 0 )
   {
     if (debug)
       USB.println("Packet sent successfully.");
-    free(packet);
-    packet=NULL;
-    return 1;
+     return 1;
   }
   else
   {
     if (debug)
       USB.println("Didn't send value.");
-    free(packet);
-    packet=NULL;
-    return 0;
+      return 0;
   }
+
 }
 int Rain_Gauge::send_RG(char* convertFloat, char* combVal, char* temp, char* MAC_ADDRESS){
+  // Added to fix the only send once error
+  xbeeDM.ON();
   // Create the packet that we will send wirelessly
   packetXBee* packet; 
   // Create new frame (ASCII)
@@ -310,17 +318,19 @@ int Rain_Gauge::send_RG(char* convertFloat, char* combVal, char* temp, char* MAC
   xbeeDM.setDestinationParams(packet, MAC_ADDRESS, frame.buffer, frame.length); 
   // send XBee packet
   xbeeDM.sendXBee(packet);
+  delay(1000);
+  //clear data packet
+  free(packet);
+  packet=NULL;
   // check TX flag
   if( xbeeDM.error_TX == 0 )
   {
-    free(packet);
-    packet=NULL;
+    USB.println("Packet sent successfully.");
     return 1;
   }
   else
   {
-    free(packet);
-    packet=NULL;
+    USB.println("Didn't send value.");
     return 0;
   }
 }
@@ -360,7 +370,9 @@ void Rain_Gauge::write_SD(char* convertFloat, char* combVal, char* temp, char* m
 Hop_Node::Hop_Node(){
 }
 int Hop_Node::send_InTemp(char* MAC_ADDRESS, char* message){
-   // Creates a packet to send
+     // Added to fix the only send once error
+    xbeeDM.ON();
+    // Creates a packet to send
     packetXBee* packet; 
     // Create new frame (ASCII)
     frame.createFrame(ASCII,message); 
@@ -376,21 +388,21 @@ int Hop_Node::send_InTemp(char* MAC_ADDRESS, char* message){
     xbeeDM.setDestinationParams(packet, MAC_ADDRESS, frame.buffer, frame.length); 
     // send XBee packet
     xbeeDM.sendXBee(packet);
+    delay(1000);
+    //clear data packet
+    free(packet);
+    packet=NULL;
     // check TX flag
     if( xbeeDM.error_TX == 0 )
     {
       if (debug)
-        USB.println("Packet sent successfully.");
-      free(packet);
-      packet=NULL;
+      USB.println("Packet sent successfully.");
       return 1;
     }
     else
     {
       if (debug)
-        USB.println("Didn't send value.");
-      free(packet);
-      packet=NULL;
+      USB.println("Didn't send value.");
       return 0;
    }
 }
