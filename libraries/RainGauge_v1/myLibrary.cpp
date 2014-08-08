@@ -233,6 +233,7 @@ int Rain_Gauge::send_Batt(char* MAC_ADDRESS, char* message){
   // send XBee packet
   xbeeDM.sendXBee(packet);
   // check TX flag
+  delay(500);
   if( xbeeDM.error_TX == 0 )
   {
     if (debug)
@@ -275,6 +276,7 @@ int Rain_Gauge::send_Frame(char* value, char* message, char* MAC_ADDRESS){
   //clear data packet
   free(packet);
   packet=NULL;
+  delay(500);
   // check TX flag
   if( xbeeDM.error_TX == 0 )
   {
