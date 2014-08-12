@@ -10,7 +10,7 @@
 #include <WaspFrame.h>
 
 // Change to false to disable debugging. Vise-Versa is true.
-bool debug_Mode = false;
+bool debug_Mode = true;
 
 // Gateway Mac Addresses ( Wireless Communication )
 char* MAC_ADDRESS="0013A20040794BAD"; // new meshlium
@@ -33,7 +33,7 @@ void setup() {
   RainGauge.set_Debug(debug_Mode);
   RainGauge.Init();
   // Setting time [yy:mm:dd:dow:hh:mm:ss]
-  RTC.setTime("14:08:08:06:11:53:00");
+  RTC.setTime("14:08:09:07:10:37:00");
   if (debug_Mode)
     USB.print(F("Setting time"));
 }
@@ -44,7 +44,7 @@ void loop() {
   PWR.setSensorPower(SENS_3V3,SENS_ON); 
   //5VDC Power
   //double fiveVolt = 5;
-  //PWR.setSensorPower(SENS_5V,SENS_ON); 
+  PWR.setSensorPower(SENS_5V,SENS_ON); 
   /////////////////////////////////////////////////////////////  
   // 0. Declarations
   /////////////////////////////////////////////////////////////
@@ -57,6 +57,7 @@ void loop() {
   /////////////////////////////////////////////////////////////
   //analog voltage between 0 - 3.3v (MAXBOTIX)
   RainGauge.read_Analog(convertFloat, threeVolt);
+  delay(500);
   //PWR.setWatchdog( WTD_ON, WTD_8S);
   
   // Read I2C Device
@@ -81,6 +82,7 @@ void loop() {
   //RainGauge.send_Frame(temp,loc_1, MAC_ADDRESS);
   delay(1000);
   RainGauge.send_Batt(MAC_ADDRESS, loc_1);
+  delay(500);
   /////////////////////////////////////////////////////////////
   // 3. Write to SD card only if the gateway is unavailable
   /////////////////////////////////////////////////////////////
@@ -90,7 +92,9 @@ void loop() {
   // 4. Sleep For Fifteen Minutes
   /////////////////////////////////////////////////////////////
   // Days:Hours:Minutes:Seconds
-  PWR.deepSleep("00:00:15:00",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
+  PWR.deepSleep("00:00:05:00",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
+  delay(2000);
+  xbeeDM.ON();
 }
 
 
