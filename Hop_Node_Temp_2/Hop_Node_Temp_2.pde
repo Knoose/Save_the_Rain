@@ -38,7 +38,7 @@ void setup()
   // Setting time [yy:mm:dd:dow:hh:mm:ss] 
     // Sunday = 01, Monday = 02, ...
     // hours are in a 1-24 format.
-  RTC.setTime("14:08:08:06:15:10:00");
+  RTC.setTime("14:08:08:06:17:11:00");
   if (debug_Mode)
     USB.println("Setting time");
 }
@@ -56,4 +56,5 @@ void loop(){
    // Format:   "Days:Hours:Minutes:Seconds"
    PWR.deepSleep("00:00:15:00",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
    delay(2000);
+   xbeeDM.ON();
 }
