@@ -33,7 +33,9 @@ void setup() {
   RainGauge.set_Debug(debug_Mode);
   RainGauge.Init();
   // Setting time [yy:mm:dd:dow:hh:mm:ss]
-  RTC.setTime("14:08:09:07:10:37:00");
+   // Sunday = 01, Monday = 02, ...
+    // hours are in a 1-24 format.
+  RTC.setTime("14:09:25:05:10:30:00");
   if (debug_Mode)
     USB.print(F("Setting time"));
 }
