@@ -6,8 +6,8 @@
 
 #include <WaspFrame.h>
 #include <Wire.h>
-#include <cstdlib> 
-#include <sstream>
+//#include <cstdlib> 
+//#include <sstream>
 #include <stdio.h>
 
 // define folder and file to store data
@@ -71,28 +71,40 @@ void loop() {
   #ifdef DEBUG
   USB.print(F("Time day of week, YY/MM/DD, HH:MM:SS]:"));
   USB.println(RTC.getTime());
+  USB.println("------------------------------------------");
   #endif
   //analog voltage between 0 - 3.3v
   readAnalog(convertFloat);
   // Read I2C Device
   readI2CPressure(combVal, temp);
-   USB.println("------------------------------------------");
   ////////////////////////////////////////
   // 2. Create Data frame using the Waspmote Frame class
   /////////////////////////////////////////////////////
-  
+  #ifdef DEBUG
+    USB.println("------------------------------------------");
+    USB.print(F("Battery Level: "));
+    USB.print(PWR.getBatteryLevel(),DEC);
+    USB.print(F(" %"));
+    
+    // Show the battery Volts
+    USB.print(F(" | Battery (Volts): "));
+    USB.print(PWR.getBatteryVolts());
+    USB.println(F(" V"));
+    USB.println("------------------------------------------");
+    USB.println("");
+  #endif
   // Create new frame (ASCII)
-  frame.createFrame(ASCII,"Datalog Test V1.0"); 
-  // add frame field (String message) that writes the date and time
-  frame.addSensor(SENSOR_STR, RTC.getTime());
-  // add frame field (String message) writes the analog voltage to the SD card
-  frame.addSensor(SENSOR_STR, (char *) convertFloat);
-  // add frame field (String message) writes pressure value to SD Card
-  frame.addSensor(SENSOR_STR, (char *) combVal);
-  // add frame field (string message) writes temperature to SD card
-  frame.addSensor(SENSOR_STR, (char *) temp);
-  // add frame field (Battery level)
-  frame.addSensor(SENSOR_BAT, (uint8_t) PWR.getBatteryLevel());
+//  frame.createFrame(ASCII,"Datalog Test V1.0"); 
+//  // add frame field (String message) that writes the date and time
+//  frame.addSensor(SENSOR_STR, RTC.getTime());
+//  // add frame field (String message) writes the analog voltage to the SD card
+//  frame.addSensor(SENSOR_STR, (char *) convertFloat);
+//  // add frame field (String message) writes pressure value to SD Card
+//  frame.addSensor(SENSOR_STR, (char *) combVal);
+//  // add frame field (string message) writes temperature to SD card
+//  frame.addSensor(SENSOR_STR, (char *) temp);
+//  // add frame field (Battery level)
+//  frame.addSensor(SENSOR_BAT, (uint8_t) PWR.getBatteryLevel());
   // add frame field (Accelerometer axis)
   //frame.addSensor(SENSOR_ACC, ACC.getX(), ACC.getY(), ACC.getZ() );
   
@@ -137,7 +149,7 @@ char readI2CPressure(char * combVal, char * temp){
         else{
           firstVal = val; // stores the first byte
            #ifdef DEBUG
-           USB.print(F("FirstVal: "));
+           USB.print(F("First Value: "));
            USB.println(firstVal);
            #endif
         }   
@@ -145,27 +157,28 @@ char readI2CPressure(char * combVal, char * temp){
       else if (i == 1){
         secondVal = val; // stores the second byte
         #ifdef DEBUG
-         USB.print(F("SecondVal: "));
+         USB.print(F("Second Value: "));
          USB.println(secondVal);
         #endif
       }
       else if ( i == 2){
         thirdVal = val; // stores the third byte
-        #ifdef DEBUG
-         USB.print(F("temperature: "));
-         USB.println(thirdVal);
-        #endif
+//        #ifdef DEBUG
+//         USB.print(F("temperature: "));
+//         USB.println(thirdVal);
+//        #endif
       }
     } 
    }
-   I2Ctemp(thirdVal, temp); //gets the temperature in fahrenheit
    pressure2string(firstVal, secondVal, combVal); //gets RAW pressure value
    #ifdef DEBUG
-    USB.print(F("combVal: "));
+    USB.print(F("Combined Value: "));
     USB.println(combVal);
-    USB.print(F("temp: "));
-    USB.println(temp);
+    USB.println("------------------------------------------");
+    USB.print(F("RAW Temp: "));
+    USB.println(thirdVal);
    #endif
+   I2Ctemp(thirdVal, temp); //gets the temperature in fahrenheit
 }
 
 char readAnalog(char * convertFloat){
