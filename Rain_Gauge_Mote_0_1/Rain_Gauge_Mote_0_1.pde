@@ -48,9 +48,9 @@ void setup() {
   ACC.ON();
   
   // 3.3VDC Power
-  PWR.setSensorPower(SENS_3V3,SENS_ON); 
+  //PWR.setSensorPower(SENS_3V3,SENS_ON); 
   //5VDC Power
-  //PWR.setSensorPower(SENS_5V,SENS_ON); 
+  PWR.setSensorPower(SENS_5V,SENS_ON); 
   delay(2000);
 
 }
@@ -76,7 +76,7 @@ void loop() {
   readAnalog(convertFloat);
   // Read I2C Device
   readI2CPressure(combVal, temp);
-  
+   USB.println("------------------------------------------");
   ////////////////////////////////////////
   // 2. Create Data frame using the Waspmote Frame class
   /////////////////////////////////////////////////////
@@ -99,18 +99,18 @@ void loop() {
   /////////////////////////////////////////////////////   
   // 3. Append data to file
   /////////////////////////////////////////////////////  
-  #ifdef DEBUG
-  if(SD.appendln(filename, frame.buffer, frame.length)) USB.println(F("append ok"));
-  else USB.println(F("append failed"));
-  #endif
-  /////////////////////////////////////////////////////
-  // 4. Show last 'filename' line
-  /////////////////////////////////////////////////////
-  #ifdef DEBUG
-  USB.println(F("Show last 'filename' line:"));
-  USB.println(SD.catln( filename, SD.numln(filename)-1, SD.numln(filename)) );  
-  USB.println(F("-----------------------------"));
-  #endif
+//  #ifdef DEBUG
+//  if(SD.appendln(filename, frame.buffer, frame.length)) USB.println(F("append ok"));
+//  else USB.println(F("append failed"));
+//  #endif
+//  /////////////////////////////////////////////////////
+//  // 4. Show last 'filename' line
+//  /////////////////////////////////////////////////////
+//  #ifdef DEBUG
+//  USB.println(F("Show last 'filename' line:"));
+//  USB.println(SD.catln( filename, SD.numln(filename)-1, SD.numln(filename)) );  
+//  USB.println(F("-----------------------------"));
+//  #endif
   // Delay for 2 seconds, in milliseconds
   delay(2000); 
 }
@@ -123,7 +123,7 @@ void loop() {
 char readI2CPressure(char * combVal, char * temp){
   int val, firstVal, secondVal, thirdVal, Status;
   // Read I2C Device
-  Wire.requestFrom(0x28, 3);
+  Wire.requestFrom(0x48, 3);
    while(Wire.available()){    // slave may send less than requested
     for (int i = 0; i < 3 ; i++){
       val = Wire.receive(); //reads the value from address 40 0x28
