@@ -205,17 +205,21 @@ char Rain_Gauge::read_Pressure(char * combVal, char * temp, int I2C_ADDRESS){
       }
     } 
   }
+  if (debug)
+    USB.println(F("-------------------------------"));
   // Calculate the the total based on base 256
   // convert totalval to a char variable named combVal
   convert_Temp(thirdVal, temp); //gets the temperature in fahrenheit
   convert_Pressure(firstVal, secondVal, combVal);
+  if (debug)
+    USB.println(F("-------------------------------"));
   //pressure2string(firstVal, secondVal, combVal); //gets RAW pressure value
-  #ifdef DEBUG
-    USB.print(F("combVal: "));
+  if (debug){
+    USB.print(F("Decimal Pressure: "));
     USB.println(combVal);
-    USB.print(F("temp: "));
+    USB.print(F("Celsius Temp: "));
     USB.println(temp);
-  #endif
+  }
 }
 int Rain_Gauge::send_Batt(char* MAC_ADDRESS, char* message){
   // Added to fix the only send once error
