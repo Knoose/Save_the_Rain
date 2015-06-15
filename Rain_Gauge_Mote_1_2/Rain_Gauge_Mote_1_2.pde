@@ -27,6 +27,7 @@ int I2C_ADDRESS4 = 104; //Address 0x68
 char* loc_0 = "Link+";
 char* loc_1 = "Waverly_RG";
 char* loc_3 = "Bird_HN_W";
+char* loc_4 = "1/23/15_TEST";
 
 
 void setup() {
@@ -35,56 +36,45 @@ void setup() {
   // Setting time [yy:mm:dd:dow:hh:mm:ss]
    // Sunday = 01, Monday = 02, ...
     // hours are in a 1-24 format.
-  RTC.setTime("14:09:25:05:10:30:00");
-  if (debug_Mode)
-    USB.print(F("Setting time"));
+  RTC.setTime("15:06:15:04:12:30:00");
+  if (debug_Mode){
+    USB.println(F("Setting time"));
+    USB.println(F("-------------------------------"));
+  }
 }
 
 void loop() {
+  //setRTCfromMeshlium(MAC_ADDRESS);
   // 3.3VDC Power
-  double threeVolt = 3.3;
-  PWR.setSensorPower(SENS_3V3,SENS_ON); 
+  //double threeVolt = 3.3;
+  //PWR.setSensorPower(SENS_3V3,SENS_ON); 
   //5VDC Power
-  //double fiveVolt = 5;
+  double fiveVolt = 5;
   PWR.setSensorPower(SENS_5V,SENS_ON); 
   /////////////////////////////////////////////////////////////  
   // 0. Declarations
   /////////////////////////////////////////////////////////////
   char convertFloat[10];
   char combVal[7] = "000000";
-  char temp[5] = "0000";
+  float temp[5];
   int error = 0;
   /////////////////////////////////////////////////////////////
   // 1. Getting Inputs
   /////////////////////////////////////////////////////////////
   //analog voltage between 0 - 3.3v (MAXBOTIX)
-  RainGauge.read_Analog(convertFloat, threeVolt);
-  delay(500);
-  //PWR.setWatchdog( WTD_ON, WTD_8S);
-  
+  //RainGauge.read_Analog(convertFloat, fiveVolt);
+  //delay(500);
   // Read I2C Device
-  //RainGauge.read_Pressure(combVal, temp, I2C_ADDRESS2);
-  
-  //  PWR.setWatchdog( WTD_OFF, WTD_8S);
-  //  if( intFlag & WTD_INT )
-  //  {
-  //    Wire.close(); 
-  //    delay(500);
-  //    Wire.begin();
-  //  }
-  //  clearIntFlag();
-  //  PWR.clearInterruptionPin(); 
-  
+  RainGauge.read_Pressure(combVal, temp, I2C_ADDRESS2);
   /////////////////////////////////////////////////////////////
   // 2. Send to Gateway
   /////////////////////////////////////////////////////////////
-  // myObject.send2mesh(convertFloat,combVal, temp, MAC_ADDRESS);
-  RainGauge.send_Frame(convertFloat,loc_1, MAC_ADDRESS);
+  // RainGauge.send_Frame(convertFloat,loc_1, MAC_ADDRESS);
+  //delay(1000);
+  RainGauge.send_RG(combVal,loc_1,temp,MAC_ADDRESS);
   delay(1000);
-  //RainGauge.send_Frame(temp,loc_1, MAC_ADDRESS);
-  delay(1000);
-  RainGauge.send_Batt(MAC_ADDRESS, loc_1);
-  delay(500);
+  //RainGauge.send_Batt(MAC_ADDRESS, loc_1);
+  //delay(500);
   /////////////////////////////////////////////////////////////
   // 3. Write to SD card only if the gateway is unavailable
   /////////////////////////////////////////////////////////////
@@ -94,7 +84,7 @@ void loop() {
   // 4. Sleep For Fifteen Minutes
   /////////////////////////////////////////////////////////////
   // Days:Hours:Minutes:Seconds
-  PWR.deepSleep("00:00:05:00",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
+  PWR.deepSleep("00:00:15:00",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
   delay(2000);
   xbeeDM.ON();
 }
