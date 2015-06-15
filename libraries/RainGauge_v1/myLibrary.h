@@ -127,8 +127,9 @@ public:
     - CombVal is the the pressure value.
     - Temp is the temperature value.
     - MAC_ADDRESS is the Mac Address of the desired gateway. 
-    */   
-    int send_RG(char* convertFloat, char* combVal, char* temp, char* MAC_ADDRESS);
+    */ 
+    int send_RG(char* value, char* message, char* temp, char* MAC_ADDRESS);  
+    int send_RG_old(char* convertFloat, char* combVal, char* temp, char* MAC_ADDRESS);
     /*
     This function writes a data frame to the SD card.  
     - ConvertFloat is the Maxboxtix analog value. 
