@@ -172,6 +172,7 @@ char Rain_Gauge::read_Analog(char * convertFloat, double volt_level){
 char Rain_Gauge::read_Pressure(char * combVal, float * temp, int I2C_ADDRESS){
   int val, firstVal, secondVal, thirdVal, Status, totalVal=0;
   // Read I2C Device
+  //USB.println((I2C_ADDRESS));
   Wire.requestFrom(I2C_ADDRESS, 3);
    while(Wire.available()){    // slave may send less than requested
     for (int i = 0; i < 3 ; i++){
@@ -218,8 +219,8 @@ char Rain_Gauge::read_Pressure(char * combVal, float * temp, int I2C_ADDRESS){
   if (debug){
     USB.print(F("Decimal Pressure: "));
     USB.println(combVal);
-    //USB.print(F("Celsius Temp: "));
-    //USB.println(temp);
+    USB.print(F("Celsius Temp: "));
+    USB.println(*temp);
   }
 }
 int Rain_Gauge::send_Batt(char* MAC_ADDRESS, char* message){
@@ -311,9 +312,6 @@ int Rain_Gauge::send_RG(char* value, char* message, float* temp, char* MAC_ADDRE
   frame.addSensor(SENSOR_TCA, *temp);
   // add frame field (Battery level)
   frame.addSensor(SENSOR_BAT, (uint8_t) PWR.getBatteryLevel());
-  // add frame field (Accelerometer axis)
-  //frame.addSensor(SENSOR_ACC, ACC.getX(), ACC.getY(), ACC.getZ() );
-  //USB.println(frame.getFrameSize(),DEC);  
   // Send To Gateway ( I.E. Meshlium ) 
   packet=(packetXBee*) calloc(1,sizeof(packetXBee)); 
   // Choose transmission mode: UNICAST or BROADCAST
@@ -329,14 +327,18 @@ int Rain_Gauge::send_RG(char* value, char* message, float* temp, char* MAC_ADDRE
   // check TX flag
   if( xbeeDM.error_TX == 0 )
   {
-    USB.println("Packet sent successfully.");
+    if (debug)
+      USB.println("Packet sent successfully.");
     return 1;
   }
   else
   {
-    USB.println("Didn't send value.");
+    if (debug)
+      USB.println("Didn't send value.");
     return 0;
   }
+  if (debug)
+    USB.println(F("-------------------------------"));
 }
 int Rain_Gauge::send_RG_old(char* convertFloat, char* combVal, char* temp, char* MAC_ADDRESS){
   // Added to fix the only send once error
@@ -417,7 +419,8 @@ void Rain_Gauge::write_SD(char* convertFloat, char* combVal, float* temp, char* 
  ******************************************************************************/
 Hop_Node::Hop_Node(){
 }
-int Hop_Node::send_InTemp(char* MAC_ADDRESS, char* message){
+int Hop_Node::send_InTemp(char* MAC_ADDRESS, char* message)
+{
      // Added to fix the only send once error
     xbeeDM.ON();
     // Creates a packet to send
@@ -444,13 +447,13 @@ int Hop_Node::send_InTemp(char* MAC_ADDRESS, char* message){
     if( xbeeDM.error_TX == 0 )
     {
       if (debug)
-      USB.println("Packet sent successfully.");
+        USB.println("Packet sent successfully.");
       return 1;
     }
     else
     {
       if (debug)
-      USB.println("Didn't send value.");
+        USB.println("Didn't send value.");
       return 0;
    }
 }
