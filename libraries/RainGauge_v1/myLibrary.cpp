@@ -117,7 +117,7 @@ char Rain_Gauge::convert_Pressure(int firstVal, int secondVal, char * combVal){
    sprintf((char*)newVar, "%i\0",totalVal);
    strcpy(combVal,newVar);
 }
-char Rain_Gauge::convert_Temp(int val, char * temp){
+float Rain_Gauge::convert_Temp(int val, float * temp){
   float cTemp, fTemp;
    val = val << 3; // shift the temperature to the left by 3 bits
   // Determines the Temperature in celsius 
@@ -131,8 +131,9 @@ char Rain_Gauge::convert_Temp(int val, char * temp){
     USB.print(F("Temperature in Fahrenheit: "));
     USB.println(fTemp);
    }
+   *temp = cTemp;
    //converts int to char *
-   float2string(cTemp,temp,3);
+   //float2string(cTemp,temp,3);
 }
 int Rain_Gauge::float2string(float f, char* c, uint8_t prec){
   // float value, where you want to store it, how many decimal places you want
@@ -168,7 +169,7 @@ char Rain_Gauge::read_Analog(char * convertFloat, double volt_level){
   //function to convert floating point numbers to integers
   float2string(val1, convertFloat, 3);
 }
-char Rain_Gauge::read_Pressure(char * combVal, char * temp, int I2C_ADDRESS){
+char Rain_Gauge::read_Pressure(char * combVal, float * temp, int I2C_ADDRESS){
   int val, firstVal, secondVal, thirdVal, Status, totalVal=0;
   // Read I2C Device
   Wire.requestFrom(I2C_ADDRESS, 3);
@@ -296,18 +297,18 @@ int Rain_Gauge::send_Frame(char* value, char* message, char* MAC_ADDRESS){
   }
 
 }
-int Rain_Gauge::send_RG(char* value, char* message, char* temp, char* MAC_ADDRESS)
+int Rain_Gauge::send_RG(char* value, char* message, float* temp, char* MAC_ADDRESS)
 {
-// Added to fix the only send once error
+  // Added to fix the only send once error
   xbeeDM.ON();
   // Create the packet that we will send wirelessly
   packetXBee* packet; 
   // Create new frame (ASCII)
-  frame.createFrame(ASCII,"Message"); 
+  frame.createFrame(ASCII,message); 
   // add frame field (String message) writes pressure value to SD Card
   frame.addSensor(SENSOR_STR, (char *) value);
   // add frame field (string message) writes temperature to SD card
-  frame.addSensor(SENSOR_TCA, temp);
+  frame.addSensor(SENSOR_TCA, *temp);
   // add frame field (Battery level)
   frame.addSensor(SENSOR_BAT, (uint8_t) PWR.getBatteryLevel());
   // add frame field (Accelerometer axis)
@@ -381,7 +382,7 @@ int Rain_Gauge::send_RG_old(char* convertFloat, char* combVal, char* temp, char*
     return 0;
   }
 }
-void Rain_Gauge::write_SD(char* convertFloat, char* combVal, char* temp, char* message){
+void Rain_Gauge::write_SD(char* convertFloat, char* combVal, float* temp, char* message){
   char* path="/data";
   char* filename="/data/log";
   SD.ON();
@@ -402,7 +403,7 @@ void Rain_Gauge::write_SD(char* convertFloat, char* combVal, char* temp, char* m
   // add frame field (String message) writes pressure value to SD Card
   frame.addSensor(SENSOR_STR, (char *) combVal);
   // add frame field (string message) writes temperature to SD card
-  frame.addSensor(SENSOR_STR, (char *) temp);
+  frame.addSensor(SENSOR_TCA, (char *) temp);
   // add frame field (Battery level)
   frame.addSensor(SENSOR_BAT, (uint8_t) PWR.getBatteryLevel());
   if(SD.appendln(filename, frame.buffer, frame.length)) USB.println(F("append ok"));

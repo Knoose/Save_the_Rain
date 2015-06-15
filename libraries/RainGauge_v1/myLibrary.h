@@ -79,7 +79,7 @@ public:
     - val is computed and converted to a string.
     - temp is the final value.
     */   
-    char convert_Temp( int val, char * temp);
+    float convert_Temp( int val, float * temp);
     /* ## NOTE: Add selection for celsius/Fahrenheit
     This function converts floats to strings.
     - float f : a floating point value.
@@ -108,7 +108,7 @@ public:
     - Temp is string value for the temperature in celsius. 
     - I2C_ADDRESS is the I2C address to read from.
     */   
-    char read_Pressure(char * combVal, char * temp, int I2C_ADDRESS);
+    char read_Pressure(char * combVal, float * temp, int I2C_ADDRESS);
     /*
     This function sends the current battery level to a gateway.
     - MAC_ADDRESS is the Mac Address of the desired gateway. 
@@ -128,7 +128,7 @@ public:
     - Temp is the temperature value.
     - MAC_ADDRESS is the Mac Address of the desired gateway. 
     */ 
-    int send_RG(char* value, char* message, char* temp, char* MAC_ADDRESS);  
+    int send_RG(char* value, char* message, float* temp, char* MAC_ADDRESS);  
     int send_RG_old(char* convertFloat, char* combVal, char* temp, char* MAC_ADDRESS);
     /*
     This function writes a data frame to the SD card.  
@@ -136,7 +136,7 @@ public:
     - CombVal is the the pressure value.
     - Temp is the temperature value.
     */   
-    void write_SD(char* convertFloat, char* combVal, char* temp, char* message);
+    void write_SD(char* convertFloat, char* combVal, float* temp, char* message);
  
 };
 extern Rain_Gauge	RainGauge;
