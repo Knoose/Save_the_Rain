@@ -49,7 +49,7 @@ int Rain_Gauge::Init(){
   xbeeDM.ON();
   xbeeDM.setMeshNetworkRetries(0x06);
   if (debug) 
-    USB.println(F("Waspmote Test: #1"));
+    USB.println(F("Rain Gauge Test: #1"));
   // Set I2C ON
   Wire.begin();
   
@@ -217,8 +217,8 @@ char Rain_Gauge::read_Pressure(char * combVal, char * temp, int I2C_ADDRESS){
   if (debug){
     USB.print(F("Decimal Pressure: "));
     USB.println(combVal);
-    USB.print(F("Celsius Temp: "));
-    USB.println(temp);
+    //USB.print(F("Celsius Temp: "));
+    //USB.println(temp);
   }
 }
 int Rain_Gauge::send_Batt(char* MAC_ADDRESS, char* message){
@@ -296,7 +296,48 @@ int Rain_Gauge::send_Frame(char* value, char* message, char* MAC_ADDRESS){
   }
 
 }
-int Rain_Gauge::send_RG(char* convertFloat, char* combVal, char* temp, char* MAC_ADDRESS){
+int Rain_Gauge::send_RG(char* value, char* message, char* temp, char* MAC_ADDRESS)
+{
+// Added to fix the only send once error
+  xbeeDM.ON();
+  // Create the packet that we will send wirelessly
+  packetXBee* packet; 
+  // Create new frame (ASCII)
+  frame.createFrame(ASCII,"Message"); 
+  // add frame field (String message) writes pressure value to SD Card
+  frame.addSensor(SENSOR_STR, (char *) value);
+  // add frame field (string message) writes temperature to SD card
+  frame.addSensor(SENSOR_TCA, temp);
+  // add frame field (Battery level)
+  frame.addSensor(SENSOR_BAT, (uint8_t) PWR.getBatteryLevel());
+  // add frame field (Accelerometer axis)
+  //frame.addSensor(SENSOR_ACC, ACC.getX(), ACC.getY(), ACC.getZ() );
+  //USB.println(frame.getFrameSize(),DEC);  
+  // Send To Gateway ( I.E. Meshlium ) 
+  packet=(packetXBee*) calloc(1,sizeof(packetXBee)); 
+  // Choose transmission mode: UNICAST or BROADCAST
+  packet->mode=UNICAST; 
+  // set destination XBee parameters to packet
+  xbeeDM.setDestinationParams(packet, MAC_ADDRESS, frame.buffer, frame.length); 
+  // send XBee packet
+  xbeeDM.sendXBee(packet);
+  delay(1000);
+  //clear data packet
+  free(packet);
+  packet=NULL;
+  // check TX flag
+  if( xbeeDM.error_TX == 0 )
+  {
+    USB.println("Packet sent successfully.");
+    return 1;
+  }
+  else
+  {
+    USB.println("Didn't send value.");
+    return 0;
+  }
+}
+int Rain_Gauge::send_RG_old(char* convertFloat, char* combVal, char* temp, char* MAC_ADDRESS){
   // Added to fix the only send once error
   xbeeDM.ON();
   // Create the packet that we will send wirelessly
