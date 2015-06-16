@@ -124,8 +124,7 @@ void loop() {
 //  USB.println(F("-----------------------------"));
 //  #endif
   // Delay for 2 seconds, in milliseconds
-  PWR.deepSleep("00:00:00:10",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
-  delay(2000); 
+  delay(3000); 
 }
 
 
