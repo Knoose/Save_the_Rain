@@ -63,28 +63,30 @@ void loop() {
   /////////////////////////////////////////////////////////////
   //analog voltage between 0 - 3.3v (MAXBOTIX)
   //RainGauge.read_Analog(convertFloat, fiveVolt);
-  //delay(500);
+  delay(500);
   // Read I2C Device
   RainGauge.read_Pressure(combVal, temp, I2C_ADDRESS2);
   /////////////////////////////////////////////////////////////
   // 2. Send to Gateway
   /////////////////////////////////////////////////////////////
   // RainGauge.send_Frame(convertFloat,loc_1, MAC_ADDRESS);
-  //delay(1000);
+  delay(500);
   RainGauge.send_RG(combVal,loc_1,temp,MAC_ADDRESS);
-  delay(1000);
+  delay(500);
   //RainGauge.send_Batt(MAC_ADDRESS, loc_1);
   //delay(500);
   /////////////////////////////////////////////////////////////
   // 3. Write to SD card only if the gateway is unavailable
   /////////////////////////////////////////////////////////////
-  RainGauge.write_SD(convertFloat,combVal, temp, loc_1);
+  RainGauge.write_SD(combVal, loc_1, temp);
+  delay(500);
   //frame.showFrame();
   /////////////////////////////////////////////////////////////
   // 4. Sleep For Fifteen Minutes
   /////////////////////////////////////////////////////////////
   // Days:Hours:Minutes:Seconds
-  PWR.deepSleep("00:00:15:00",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
+  //RainGauge.hibernate();
+  //PWR.deepSleep("00:00:00:10",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
   delay(2000);
   xbeeDM.ON();
 }
