@@ -196,7 +196,7 @@ void loop() {
   /////////////////////////////////////////////////////
   // 6. Sleep For Fifteen Minutes
   /////////////////////////////////////////////////////
-  //PWR.deepSleep("00:00:15:00",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
+  PWR.deepSleep("00:00:15:00",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
 }
 
 

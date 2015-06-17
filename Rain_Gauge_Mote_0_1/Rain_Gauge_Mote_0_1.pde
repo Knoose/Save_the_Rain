@@ -49,15 +49,15 @@ void setup() {
   
   // 3.3VDC Power
   //PWR.setSensorPower(SENS_3V3,SENS_ON); 
-  //5VDC Power
-  PWR.setSensorPower(SENS_5V,SENS_ON); 
-  delay(2000);
+
 
 }
 
 
 void loop() {
-  
+    //5VDC Power
+  PWR.setSensorPower(SENS_5V,SENS_ON); 
+  delay(2000);
   /////////////////////////////////////////////////////////////  
   // 0. Declarations
   /////////////////////////////////////////////////////////////
@@ -124,6 +124,7 @@ void loop() {
 //  USB.println(F("-----------------------------"));
 //  #endif
   // Delay for 2 seconds, in milliseconds
+  PWR.deepSleep("00:00:00:10",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
   delay(3000); 
 }
 
