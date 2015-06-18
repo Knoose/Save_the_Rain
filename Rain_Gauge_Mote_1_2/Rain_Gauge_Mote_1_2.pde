@@ -5,11 +5,14 @@
 // kjnucera@syr.edu
 
 // Includes the Necessary Libraries 
+//#include <myLibrary.h>
 #include <WaspXBeeDM.h>
 #include <myLibrary.h>
 #include <WaspFrame.h>
+//#include <myLibrary.h>
 
 // Change to false to disable debugging. Vise-Versa is true.
+//bool debug_Mode = false;
 bool debug_Mode = true;
 
 // Gateway Mac Addresses ( Wireless Communication )
@@ -32,7 +35,14 @@ char* loc_4 = "1/23/15_TEST";
 
 void setup() {
   RainGauge.set_Debug(debug_Mode);
-  RainGauge.Init();
+ // RainGauge.Init();
+  USB.ON();
+  xbeeDM.ON();
+  xbeeDM.setMeshNetworkRetries(0x06);
+  Wire.begin();
+  RTC.ON();
+  SD.ON();
+  
   // Setting time [yy:mm:dd:dow:hh:mm:ss]
    // Sunday = 01, Monday = 02, ...
     // hours are in a 1-24 format.
@@ -44,12 +54,12 @@ void setup() {
 }
 
 void loop() {
-  //setRTCfromMeshlium(MAC_ADDRESS);
+  //xbeeDM.setRTCfromMeshlium(MAC_ADDRESS);
   // 3.3VDC Power
   //double threeVolt = 3.3;
-  //PWR.setSensorPower(SENS_3V3,SENS_ON); 
+  // PWR.setSensorPower(SENS_3V3,SENS_ON); 
   //5VDC Power
-  double fiveVolt = 5;
+  //double fiveVolt = 5;
   PWR.setSensorPower(SENS_5V,SENS_ON); 
   /////////////////////////////////////////////////////////////  
   // 0. Declarations
@@ -57,6 +67,8 @@ void loop() {
   char convertFloat[10];
   char combVal[7] = "000000";
   float temp[5];
+  char combVal2[7] = "000000";
+  float temp2[5];
   int error = 0;
   /////////////////////////////////////////////////////////////
   // 1. Getting Inputs
@@ -66,29 +78,31 @@ void loop() {
   delay(500);
   // Read I2C Device
   RainGauge.read_Pressure(combVal, temp, I2C_ADDRESS2);
+  delay(500);
+  //RainGauge.read_Pressure(combVal2, temp2, I2C_ADDRESS3);
   /////////////////////////////////////////////////////////////
   // 2. Send to Gateway
   /////////////////////////////////////////////////////////////
-  // RainGauge.send_Frame(convertFloat,loc_1, MAC_ADDRESS);
+  RainGauge.write_SD(combVal, loc_1, temp);
   delay(500);
   RainGauge.send_RG(combVal,loc_1,temp,MAC_ADDRESS);
   delay(500);
-  //RainGauge.send_Batt(MAC_ADDRESS, loc_1);
-  //delay(500);
   /////////////////////////////////////////////////////////////
-  // 3. Write to SD card only if the gateway is unavailable
+  // 3. Write to SD card 
   /////////////////////////////////////////////////////////////
-  RainGauge.write_SD(combVal, loc_1, temp);
+  //RainGauge.write_SD(combVal, loc_1, temp);
   delay(500);
-  //frame.showFrame();
   /////////////////////////////////////////////////////////////
   // 4. Sleep For Fifteen Minutes
   /////////////////////////////////////////////////////////////
   // Days:Hours:Minutes:Seconds
-  //RainGauge.hibernate();
-  //PWR.deepSleep("00:00:00:10",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
-  delay(2000);
-  xbeeDM.ON();
+  PWR.deepSleep("00:00:00:10",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
+  if( intFlag & RTC_INT )
+  { 
+    Utils.blinkLEDs(300);
+    intFlag &= ~(RTC_INT);
+    freeMemory();
+  }
 }
 
 
