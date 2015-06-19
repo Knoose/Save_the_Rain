@@ -116,9 +116,10 @@ void setup() {
 
 void loop() {
   // 3.3VDC Power
-  PWR.setSensorPower(SENS_3V3,SENS_ON); 
+ // PWR.setSensorPower(SENS_3V3,SENS_ON); 
   //5VDC Power
-  //PWR.setSensorPower(SENS_5V,SENS_ON); 
+  SD.ON();
+  PWR.setSensorPower(SENS_5V,SENS_ON); 
   delay(1000);
   /////////////////////////////////////////////////////////////  
   // 0. Declarations
@@ -135,9 +136,9 @@ void loop() {
     USB.println(RTC.getTime());
   #endif
   //analog voltage between 0 - 3.3v
-  readAnalog(convertFloat);
+ // readAnalog(convertFloat);
   // Read I2C Device
- // readI2CPressure(combVal, temp);
+  readI2CPressure(combVal, temp);
   
   ////////////////////////////////////////
   // 2. Create Data frame using the Waspmote Frame class
@@ -207,7 +208,7 @@ void loop() {
 char readI2CPressure(char * combVal, char * temp){
   unsigned char val, firstVal, secondVal, thirdVal, Status;
   // Read I2C Device
-  Wire.requestFrom(0x28, 3);
+  Wire.requestFrom(0x48, 3);
    while(Wire.available()){    // slave may send less than requested
     for (int i = 0; i < 3 ; i++){
       val = Wire.receive(); //reads the value from address 40 0x28
