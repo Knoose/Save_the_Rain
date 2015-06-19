@@ -30,6 +30,7 @@ void setup() {
   RTC.ON();
   
   // Setting time [yy:mm:dd:dow:hh:mm:ss]
+  // JAVAD
   RTC.setTime("13:08:25:06:12:33:00");
   #ifdef DEBUG
   USB.print(F("Setting time: "));
@@ -94,38 +95,40 @@ void loop() {
     USB.println("");
   #endif
   // Create new frame (ASCII)
-//  frame.createFrame(ASCII,"Datalog Test V1.0"); 
-//  // add frame field (String message) that writes the date and time
-//  frame.addSensor(SENSOR_STR, RTC.getTime());
-//  // add frame field (String message) writes the analog voltage to the SD card
-//  frame.addSensor(SENSOR_STR, (char *) convertFloat);
-//  // add frame field (String message) writes pressure value to SD Card
-//  frame.addSensor(SENSOR_STR, (char *) combVal);
-//  // add frame field (string message) writes temperature to SD card
-//  frame.addSensor(SENSOR_STR, (char *) temp);
-//  // add frame field (Battery level)
-//  frame.addSensor(SENSOR_BAT, (uint8_t) PWR.getBatteryLevel());
+  frame.createFrame(ASCII,"Datalog Test V1.0"); 
+  // add frame field (String message) that writes the date and time
+  frame.addSensor(SENSOR_STR, RTC.getTime());
+  // add frame field (String message) writes the analog voltage to the SD card
+  //frame.addSensor(SENSOR_STR, (char *) convertFloat);
+  // add frame field (String message) writes pressure value to SD Card
+  frame.addSensor(SENSOR_STR, (char *) combVal);
+  // add frame field (string message) writes temperature to SD card
+  frame.addSensor(SENSOR_STR, (char *) temp);
+  // add frame field (Battery level)
+  frame.addSensor(SENSOR_BAT, (uint8_t) PWR.getBatteryLevel());
   // add frame field (Accelerometer axis)
   //frame.addSensor(SENSOR_ACC, ACC.getX(), ACC.getY(), ACC.getZ() );
   
   /////////////////////////////////////////////////////   
   // 3. Append data to file
   /////////////////////////////////////////////////////  
-//  #ifdef DEBUG
-//  if(SD.appendln(filename, frame.buffer, frame.length)) USB.println(F("append ok"));
-//  else USB.println(F("append failed"));
-//  #endif
-//  /////////////////////////////////////////////////////
-//  // 4. Show last 'filename' line
-//  /////////////////////////////////////////////////////
+  #ifdef DEBUG
+  if(SD.appendln(filename, frame.buffer, frame.length)) USB.println(F("append ok"));
+  else USB.println(F("append failed"));
+  #endif
+  /////////////////////////////////////////////////////
+  // 4. Show last 'filename' line
+  /////////////////////////////////////////////////////
 //  #ifdef DEBUG
 //  USB.println(F("Show last 'filename' line:"));
 //  USB.println(SD.catln( filename, SD.numln(filename)-1, SD.numln(filename)) );  
 //  USB.println(F("-----------------------------"));
 //  #endif
   // Delay for 2 seconds, in milliseconds
-  PWR.deepSleep("00:00:00:10",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
-  delay(3000); 
+  // Days::Hours::minutes::seconds 
+  // JAVAD
+  PWR.deepSleep("00:00:01:00",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
+  //delay(3000); 
 }
 
 
