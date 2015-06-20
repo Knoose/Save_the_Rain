@@ -51,6 +51,7 @@ void setup() {
     USB.println(F("Setting time"));
     USB.println(F("-------------------------------"));
   }
+  RainGauge.Init();
 }
 
 void loop() {
@@ -75,6 +76,9 @@ void loop() {
   /////////////////////////////////////////////////////////////
   //analog voltage between 0 - 3.3v (MAXBOTIX)
   //RainGauge.read_Analog(convertFloat, fiveVolt);
+  USB.print(F("Time day of week, YY/MM/DD, HH:MM:SS]:"));
+  USB.println(RTC.getTime());
+  USB.println("------------------------------------------");
   delay(500);
   // Read I2C Device
   RainGauge.read_Pressure(combVal, temp, I2C_ADDRESS2);
@@ -103,6 +107,9 @@ void loop() {
     intFlag &= ~(RTC_INT);
     freeMemory();
   }
+  USB.print(F("Battery Level: "));
+  USB.print(PWR.getBatteryLevel(),DEC);
+  USB.print(F(" %"));
 }
 
 
