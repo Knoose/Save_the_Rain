@@ -55,6 +55,11 @@ public:
 		if (debug)
 			USB.print(message);
 	}
+		void println_Hex(bool debug, int message)
+	{
+		if (debug)
+			USB.printf("%x\n",message);
+	}
 
 private:
 

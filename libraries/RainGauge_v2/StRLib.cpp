@@ -41,29 +41,28 @@ int Rain_Gauge::Init(){
   // Open the USB connection
   // PAN (Personal Area Network) Identifier
   uint8_t  PANID[2]={0x7F,0xFF}; 
-  USB.ON();
+  //USB.ON();
   // init XBee 
-  xbeeDM.ON();
+  //xbeeDM.ON();
   xbeeDM.setMeshNetworkRetries(0x06);
   dp.println(debug,"Rain Gauge Test:");
   // Set I2C ON
-  Wire.begin();
+  //Wire.begin();
   // Powers RTC up, init I2C bus and read initial values
-  dp.println(debug,"Init RTC");
-  RTC.ON();
+  //dp.println(debug,"Init RTC");
+  //RTC.ON();
   
-  dp.println(debug,"Init SD");
-  SD.ON();
-  char* path="/data";
-  char* filename="/data/log";
+  //dp.println(debug,"Init SD");
+  //SD.ON();
+  //char* path="/data";
+  //char* filename="/data/log";
   
   // create path
-  SD.mkdir(path);
+  //SD.mkdir(path);
     
   // // Create files
-  SD.create(filename);
+  //SD.create(filename);
   // define folder and file to store data ( SD CARD )
-
   delay(2000);
   xbeeDM.flush();
   
@@ -129,7 +128,7 @@ char Rain_Gauge::read_Pressure(char * combVal, float * temp, int I2C_ADDRESS){
   int val, firstVal, secondVal, thirdVal, Status;
   // Read I2C Device
   dp.print(debug,"I2C Address: ");
-  dp.println_Int(debug,I2C_ADDRESS);
+  dp.println_Hex(debug,I2C_ADDRESS);
   Wire.begin();
   Wire.requestFrom(I2C_ADDRESS, 3);
    while(Wire.available()){    // slave may send less than requested
