@@ -6,7 +6,8 @@
 
 // Includes the Necessary Libraries 
 #include <WaspXBeeDM.h>
-#include <myLibrary.h>
+//#include <myLibrary.h>
+#include <StRLib.h>
 #include <WaspFrame.h>
 
 // Change to false to disable debugging.
@@ -49,7 +50,7 @@ void loop(){
   delay(500);
   // frame.showFrame();
   // send the battery level
-  HopNode.send_Batt(MAC_ADDRESS, loc_7);
+  //HopNode.send_Batt(MAC_ADDRESS, loc_7);
   //frame.showFrame();
   delay(500);
    // Go to sleep for an hour disconnecting all the switches and modules

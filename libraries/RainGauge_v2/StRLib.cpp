@@ -252,9 +252,11 @@ int Hop_Node::send_InTemp(char* MAC_ADDRESS, char* message){
     // Create new frame (ASCII)
     frame.createFrame(ASCII,message); 
     // add frame field (String message) that writes the date and time
-    frame.addSensor(SENSOR_STR, RTC.getTime());
+    //frame.addSensor(SENSOR_STR, RTC.getTime());
     // get onboard temperature
     frame.addSensor(SENSOR_IN_TEMP,(float) RTC.getTemperature());
+    // add frame field (Battery level)
+    frame.addSensor(SENSOR_BAT, (uint8_t) PWR.getBatteryLevel());
     // Memory allocation
     packet=(packetXBee*) calloc(1,sizeof(packetXBee)); 
     // Choose transmission mode: UNICAST or BROADCAST
