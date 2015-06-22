@@ -117,6 +117,7 @@ float Rain_Gauge::convert_Temp(int val, float * temp){
     USB.println(cTemp);
    }
    fTemp = ((cTemp*9)/5) + 32;
+   *temp = cTemp;
    if (debug){
     USB.print(F("Temperature in Fahrenheit: "));
     USB.println(fTemp);
@@ -171,6 +172,8 @@ int Rain_Gauge::send_RG(char* value, char* message, float* temp, char* MAC_ADDRE
 {
   // Added to fix the only send once error
   xbeeDM.ON();
+
+  //xbeeDM.setRTCfromMeshlium(MAC_ADDRESS);
   // Create the packet that we will send wirelessly
   packetXBee* packet; 
   // Create new frame (ASCII)

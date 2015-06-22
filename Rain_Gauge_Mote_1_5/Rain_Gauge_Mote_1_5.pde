@@ -31,7 +31,7 @@ char* loc_0 = "Link+";
 char* loc_1 = "Waverly_RG";
 char* loc_3 = "Bird_HN_W";
 char* loc_4 = "1/23/15_TEST";
-
+bool err;
 
 void setup() {
   RainGauge.set_Debug(debug_Mode);
@@ -46,16 +46,22 @@ void setup() {
   // Setting time [yy:mm:dd:dow:hh:mm:ss]
    // Sunday = 01, Monday = 02, ...
     // hours are in a 1-24 format.
-  RTC.setTime("15:06:15:04:12:30:00");
-  if (debug_Mode){
-    USB.println(F("Setting time"));
-    USB.println(F("-------------------------------"));
-  }
-  RainGauge.Init();
+   // RTC.setTime("15:06:15:04:12:30:00");
+  //if (debug_Mode){
+ //   USB.println(F("Setting time Internally"));
+  //}
+  if (RTC.setTime("15:06:15:04:12:30:00"))
+    USB.println("DID NOT Set time Internally");
+  else
+    USB.println("Setting time Internally");
+//  RainGauge.Init();
+    USB.println("Set Time From Meshlium");
+   else
+     USB.println("DID NOT Set Time From Meshlium");
+   USB.println(F("-------------------------------"));
 }
 
 void loop() {
-  //xbeeDM.setRTCfromMeshlium(MAC_ADDRESS);
   // 3.3VDC Power
   //double threeVolt = 3.3;
   // PWR.setSensorPower(SENS_3V3,SENS_ON); 
@@ -82,12 +88,13 @@ void loop() {
   delay(500);
   // Read I2C Device
   RainGauge.read_Pressure(combVal, temp, I2C_ADDRESS2);
+   USB.println("------------------------------------------");
   delay(500);
   //RainGauge.read_Pressure(combVal2, temp2, I2C_ADDRESS3);
   /////////////////////////////////////////////////////////////
   // 2. Send to Gateway
   /////////////////////////////////////////////////////////////
-  RainGauge.write_SD(combVal, loc_1, temp);
+  RainGauge.write_SD(combVal, loc_0, temp);
   delay(500);
   RainGauge.send_RG(combVal,loc_1,temp,MAC_ADDRESS);
   delay(500);
@@ -111,5 +118,6 @@ void loop() {
   USB.print(PWR.getBatteryLevel(),DEC);
   USB.print(F(" %"));
 }
+
 
 
