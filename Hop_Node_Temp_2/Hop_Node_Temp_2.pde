@@ -11,7 +11,7 @@
 #include <WaspFrame.h>
 
 // Change to false to disable debugging.
-bool debug_Mode = false;
+bool debug_Mode = true;
 
 //char* MAC_ADDRESS="0013A200408DE558"; // DA MESHLIUM first
 char* MAC_ADDRESS="0013A20040794BAD"; // new meshlium
@@ -34,19 +34,22 @@ packetXBee* packet;
  
 void setup()
 {
+  USB.ON();
+  xbeeDM.ON();
+  RTC.ON();
   HopNode.set_Debug(debug_Mode);
-  HopNode.Init();
+  //HopNode.Init();
   // Setting time [yy:mm:dd:dow:hh:mm:ss] 
     // Sunday = 01, Monday = 02, ...
     // hours are in a 1-24 format.
-  RTC.setTime("14:08:08:06:17:11:00");
+  RTC.setTime("15:06:22:06:17:11:00");
   if (debug_Mode)
     USB.println("Setting time");
 }
 
 void loop(){
   delay(500);
-  HopNode.send_InTemp(MAC_ADDRESS, loc_7);
+  HopNode.send_InTemp(MAC_ADDRESS, loc_0);
   delay(500);
   // frame.showFrame();
   // send the battery level
@@ -55,7 +58,7 @@ void loop(){
   delay(500);
    // Go to sleep for an hour disconnecting all the switches and modules
    // Format:   "Days:Hours:Minutes:Seconds"
-   PWR.deepSleep("00:00:15:00",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
+   PWR.deepSleep("00:00:00:10",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
    delay(2000);
    xbeeDM.ON();
 }
