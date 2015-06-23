@@ -31,7 +31,6 @@ char* loc_0 = "Link+";
 char* loc_1 = "Waverly_RG";
 char* loc_3 = "Bird_HN_W";
 char* loc_4 = "1/23/15_TEST";
-bool err;
 
 void setup() {
   RainGauge.set_Debug(debug_Mode);
@@ -42,26 +41,25 @@ void setup() {
   Wire.begin();
   RTC.ON();
   SD.ON();
-  
+  if (RTC.setTime("15:06:22:04:12:30:00"))
+    USB.println("DID NOT Set time Internally");
+  else
+    USB.println("Setting time Internally");
   // Setting time [yy:mm:dd:dow:hh:mm:ss]
    // Sunday = 01, Monday = 02, ...
     // hours are in a 1-24 format.
    // RTC.setTime("15:06:15:04:12:30:00");
   //if (debug_Mode){
- //   USB.println(F("Setting time Internally"));
-  //}
-  if (RTC.setTime("15:06:15:04:12:30:00"))
-    USB.println("DID NOT Set time Internally");
-  else
-    USB.println("Setting time Internally");
 //  RainGauge.Init();
-    USB.println("Set Time From Meshlium");
-   else
-     USB.println("DID NOT Set Time From Meshlium");
-   USB.println(F("-------------------------------"));
+//  if (xbeeDM.setRTCfromMeshlium(MAC_ADDRESS))
+//    USB.println("Set Time From Meshlium");
+//   else
+//     USB.println("DID NOT Set Time From Meshlium");
+//   USB.println(F("-------------------------------"));
 }
 
 void loop() {
+  RTC.ON();
   // 3.3VDC Power
   //double threeVolt = 3.3;
   // PWR.setSensorPower(SENS_3V3,SENS_ON); 
@@ -82,13 +80,16 @@ void loop() {
   /////////////////////////////////////////////////////////////
   //analog voltage between 0 - 3.3v (MAXBOTIX)
   //RainGauge.read_Analog(convertFloat, fiveVolt);
+  if (RTC.setTime("15:06:22:04:12:30:00"))
+    USB.println("DID NOT Set time Internally");
+  else
+    USB.println("Setting time Internally");
   USB.print(F("Time day of week, YY/MM/DD, HH:MM:SS]:"));
   USB.println(RTC.getTime());
   USB.println("------------------------------------------");
   delay(500);
   // Read I2C Device
   RainGauge.read_Pressure(combVal, temp, I2C_ADDRESS2);
-   USB.println("------------------------------------------");
   delay(500);
   //RainGauge.read_Pressure(combVal2, temp2, I2C_ADDRESS3);
   /////////////////////////////////////////////////////////////
@@ -114,9 +115,10 @@ void loop() {
     intFlag &= ~(RTC_INT);
     freeMemory();
   }
+  USB.println("------------------------------------------");
   USB.print(F("Battery Level: "));
   USB.print(PWR.getBatteryLevel(),DEC);
-  USB.print(F(" %"));
+  USB.println(F(" %"));
 }
 
 
