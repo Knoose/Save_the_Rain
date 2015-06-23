@@ -55,10 +55,15 @@ public:
 		if (debug)
 			USB.print(message);
 	}
-		void println_Hex(bool debug, int message)
+	void println_Hex(bool debug, int message)
 	{
 		if (debug)
 			USB.printf("%x\n",message);
+	}
+	void println_Float(bool debug, float message)
+	{
+		if (debug)
+			USB.println(message);
 	}
 
 private:

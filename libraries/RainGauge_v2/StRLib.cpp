@@ -99,6 +99,21 @@ int Rain_Gauge::Init(){
 bool Rain_Gauge::set_Debug(bool value){
   debug = value;
 }
+void Rain_Gauge::read_Time()
+{
+  dp.print(debug, "Time day of week, YY/MM/DD, HH:MM:SS]:");
+  dp.println(debug,RTC.getTime());
+  dp.println(debug,"------------------------------------------");
+}
+void Rain_Gauge::set_Power(int val)
+{
+    if (val == 3)
+      PWR.setSensorPower(SENS_3V3,SENS_ON);
+    else if (val == 5)
+      PWR.setSensorPower(SENS_5V,SENS_ON);
+    else
+      dp.println(debug,"Power not set.");
+}
 char Rain_Gauge::convert_Pressure(int firstVal, int secondVal, char * combVal){
    // Converts 2 int bytes to char * and then concatenates them
    char newVar[10];
@@ -109,19 +124,14 @@ char Rain_Gauge::convert_Pressure(int firstVal, int secondVal, char * combVal){
 }
 float Rain_Gauge::convert_Temp(int val, float * temp){
   float cTemp, fTemp;
-   val = val << 3; // shift the temperature to the left by 3 bits
-  // Determines the Temperature in celsius 
-   cTemp = ((((float)val/2047)*200)-50);
-   if (debug){
-    USB.print(F("Temperature in Celsius: "));
-    USB.println(cTemp);
-   }
-   fTemp = ((cTemp*9)/5) + 32;
-   *temp = cTemp;
-   if (debug){
-    USB.print(F("Temperature in Fahrenheit: "));
-    USB.println(fTemp);
-   }
+  val = val << 3; // shift the temperature to the left by 3 bits
+  cTemp = ((((float)val/2047)*200)-50);
+  dp.print(debug,"Temperature in Celsius: ");
+  dp.println_Float(debug, cTemp);
+  fTemp = ((cTemp*9)/5) + 32;
+  dp.print(debug,"Temperature in Fahrenheit: ");
+  dp.println_Float(debug,fTemp);
+  *temp = cTemp;
    //converts int to char *
    //float2string(cTemp,temp,3);
 }
@@ -214,13 +224,11 @@ void Rain_Gauge::write_SD(char* value, char* message, float* temp){
   
   char* path="/data";
   char* filename="/data/log";
-  
   // create path
-  //SD.mkdir(path);
+  SD.mkdir(path);
     
-  // // Create files
-  //SD.create(filename);
-  //define folder and file to store data ( SD CARD )
+  // Create files
+  SD.create(filename);
 
   // Create new frame (ASCII)
   frame.createFrame(ASCII,message); 
@@ -237,9 +245,20 @@ void Rain_Gauge::write_SD(char* value, char* message, float* temp){
   else 
     dp.println(debug,"Append failed");
   delay(500);
+  SD.OFF();
 }
 void Rain_Gauge::hibernate(){
-  PWR.deepSleep("00:00:00:01",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
+  PWR.deepSleep("00:00:00:10",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
+  if( intFlag & RTC_INT )
+  { 
+    intFlag &= ~(RTC_INT);
+    freeMemory();
+  }
+  dp.println(debug,"------------------------------------------");
+  dp.print(debug,"Battery Level: ");
+  dp.print_Int(debug,PWR.getBatteryLevel());
+  dp.println(debug," %");
+  RTC.ON();
 }
 
 /******************************************************************************

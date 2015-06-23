@@ -83,7 +83,9 @@ public:
     // This function sets the debugging mode for the main program.
     - value is a true/false value inputted by the user. 
     */
-    bool set_Debug(bool value);   
+    bool set_Debug(bool value);  
+    void read_Time(); 
+    void set_Power(int val);
     /*
     This function takes two base 256 values and combines them into one decimal value. 
     After that, the value is converted into a string to be sent to the meshlium.
