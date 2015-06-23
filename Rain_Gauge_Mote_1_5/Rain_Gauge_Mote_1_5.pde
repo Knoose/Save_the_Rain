@@ -1,15 +1,13 @@
 // Waspmote Pro V1.2 
 // Save The Rain Project:
-// Rain Gauge v1.2
+// Rain Gauge v1.5
 // By: Kyle Nucera
 // kjnucera@syr.edu
 
 // Includes the Necessary Libraries 
-//#include <myLibrary.h>
 #include <WaspXBeeDM.h>
 #include <StRLib.h>
 #include <WaspFrame.h>
-//#include <myLibrary.h>
 
 // Change to false to disable debugging. Vise-Versa is true.
 //bool debug_Mode = false;
@@ -24,7 +22,7 @@ char* MAC_ADDRESS="0013A20040794BAD"; // new meshlium
 int I2C_ADDRESS1 = 40; // Address 0x28
 int I2C_ADDRESS2 = 72; // Address 0x48
 int I2C_ADDRESS3 = 88; // Address 0x58
-int I2C_ADDRESS4 = 104; //Address 0x68
+int I2C_ADDRESS4 = 104; //Address 0x68 -- Doesn't work with waspmote :(
 
 //Global Names for the location we're sending from
 char* loc_0 = "Link+";
@@ -39,19 +37,19 @@ void setup() {
   xbeeDM.ON();
   xbeeDM.setMeshNetworkRetries(0x06);
   Wire.begin();
+  //PCB needs power to have RTC work
+  RainGauge.set_Power(5);
   RTC.ON();
-  SD.ON();
-  if (RTC.setTime("15:06:22:04:12:30:00"))
+  // Setting time [yy:mm:dd:dow:hh:mm:ss]
+  // Sunday = 01, Monday = 02, ...
+  // hours are in a 1-24 format.
+  if (RTC.setTime("15:06:23:03:13:12:00"))
     USB.println("DID NOT Set time Internally");
   else
     USB.println("Setting time Internally");
-  // Setting time [yy:mm:dd:dow:hh:mm:ss]
-   // Sunday = 01, Monday = 02, ...
-    // hours are in a 1-24 format.
-   // RTC.setTime("15:06:15:04:12:30:00");
   //if (debug_Mode){
 //  RainGauge.Init();
-//  if (xbeeDM.setRTCfromMeshlium(MAC_ADDRESS))
+//if (xbeeDM.setRTCfromMeshlium(MAC_ADDRESS))
 //    USB.println("Set Time From Meshlium");
 //   else
 //     USB.println("DID NOT Set Time From Meshlium");
@@ -59,34 +57,28 @@ void setup() {
 }
 
 void loop() {
-  RTC.ON();
-  // 3.3VDC Power
-  //double threeVolt = 3.3;
-  // PWR.setSensorPower(SENS_3V3,SENS_ON); 
-  //5VDC Power
-  //double fiveVolt = 5;
-  PWR.setSensorPower(SENS_5V,SENS_ON); 
+  // Powering on the PCB Board
+  RainGauge.set_Power(5);
   /////////////////////////////////////////////////////////////  
   // 0. Declarations
   /////////////////////////////////////////////////////////////
-  char convertFloat[10];
+  //char convertFloat[10];
   char combVal[7] = "000000";
   float temp[5];
-  char combVal2[7] = "000000";
-  float temp2[5];
-  int error = 0;
+  // char combVal2[7] = "000000";
+  // float temp2[5];
+  /* 3.3VDC Analog Variable */
+  //double threeVolt = 3.3;
+  /* 5VDC Analog Variable*/
+  //double fiveVolt = 5;
   /////////////////////////////////////////////////////////////
   // 1. Getting Inputs
   /////////////////////////////////////////////////////////////
   //analog voltage between 0 - 3.3v (MAXBOTIX)
   //RainGauge.read_Analog(convertFloat, fiveVolt);
-  if (RTC.setTime("15:06:22:04:12:30:00"))
-    USB.println("DID NOT Set time Internally");
-  else
-    USB.println("Setting time Internally");
-  USB.print(F("Time day of week, YY/MM/DD, HH:MM:SS]:"));
-  USB.println(RTC.getTime());
-  USB.println("------------------------------------------");
+  //Digital Value
+  //RainGauge.read_digital();
+  RainGauge.read_Time();
   delay(500);
   // Read I2C Device
   RainGauge.read_Pressure(combVal, temp, I2C_ADDRESS2);
@@ -108,17 +100,8 @@ void loop() {
   // 4. Sleep For Fifteen Minutes
   /////////////////////////////////////////////////////////////
   // Days:Hours:Minutes:Seconds
-  PWR.deepSleep("00:00:00:10",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
-  if( intFlag & RTC_INT )
-  { 
-    Utils.blinkLEDs(300);
-    intFlag &= ~(RTC_INT);
-    freeMemory();
-  }
-  USB.println("------------------------------------------");
-  USB.print(F("Battery Level: "));
-  USB.print(PWR.getBatteryLevel(),DEC);
-  USB.println(F(" %"));
+  //  PWR.deepSleep("00:00:00:10",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
+  RainGauge.hibernate();
 }
 
 
