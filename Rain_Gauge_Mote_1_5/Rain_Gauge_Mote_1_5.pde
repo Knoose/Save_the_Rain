@@ -100,7 +100,7 @@ void loop() {
   // 4. Sleep For Fifteen Minutes
   /////////////////////////////////////////////////////////////
   // Days:Hours:Minutes:Seconds
-  //  PWR.deepSleep("00:00:00:10",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
+  PWR.deepSleep("00:00:00:10",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
   RainGauge.hibernate();
 }
 

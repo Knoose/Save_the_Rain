@@ -248,7 +248,7 @@ void Rain_Gauge::write_SD(char* value, char* message, float* temp){
   SD.OFF();
 }
 void Rain_Gauge::hibernate(){
-  PWR.deepSleep("00:00:00:10",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
+  //PWR.deepSleep("00:00:00:10",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
   if( intFlag & RTC_INT )
   { 
     intFlag &= ~(RTC_INT);
@@ -257,7 +257,7 @@ void Rain_Gauge::hibernate(){
   dp.println(debug,"------------------------------------------");
   dp.print(debug,"Battery Level: ");
   dp.print_Int(debug,PWR.getBatteryLevel());
-  dp.println(debug," %");
+  dp.println(debug,"%");
   RTC.ON();
 }
 
