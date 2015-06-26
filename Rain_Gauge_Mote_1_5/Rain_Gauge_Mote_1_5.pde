@@ -43,7 +43,7 @@ void setup() {
   // Setting time [yy:mm:dd:dow:hh:mm:ss]
   // Sunday = 01, Monday = 02, ...
   // hours are in a 1-24 format.
-  if (RTC.setTime("15:06:23:03:13:12:00"))
+  if (RTC.setTime("15:06:24:04:18:10:00"))
     USB.println("DID NOT Set time Internally");
   else
     USB.println("Setting time Internally");
@@ -100,7 +100,7 @@ void loop() {
   // 4. Sleep For Fifteen Minutes
   /////////////////////////////////////////////////////////////
   // Days:Hours:Minutes:Seconds
-  PWR.deepSleep("00:00:00:10",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
+  PWR.deepSleep("00:00:05:00",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
   RainGauge.hibernate();
 }
 
