@@ -93,7 +93,7 @@ public:
     - SecondVal is the second base 256 byte.
     - CombVal is the combined string value of firstVal & secondVal. 
     */   
-    char convert_Pressure(int firstVal, int secondVal, char * combVal);
+    char convert_Pressure(int firstVal, int secondVal, float * combVal);
     /* ## NOTE: Add selection for celsius/Fahrenheit
     This function determines the outside temperature of the presure transducer in celsius.
     - val is the RAW temperature value.
@@ -129,7 +129,7 @@ public:
     - Temp is string value for the temperature in celsius. 
     - I2C_ADDRESS is the I2C address to read from.
     */   
-    char read_Pressure(char * combVal, float * temp, int I2C_ADDRESS);
+    char read_Pressure(float * combVal, float * temp, int I2C_ADDRESS);
     /*
     This function sends the current battery level to a gateway.
     - MAC_ADDRESS is the Mac Address of the desired gateway. 
@@ -149,7 +149,7 @@ public:
     - Temp is the temperature value.
     - MAC_ADDRESS is the Mac Address of the desired gateway. 
     */   
-    int send_RG(char* value, char* message, float* temp, char* MAC_ADDRESS);
+    int send_RG(float* value, char* message, float* temp, char* MAC_ADDRESS);
     int send_RG_old(char* convertFloat, char* combVal, char* temp, char* MAC_ADDRESS);
     /*
     This function writes a data frame to the SD card.  
@@ -157,7 +157,7 @@ public:
     - CombVal is the the pressure value.
     - Temp is the temperature value.
     */   
-    void write_SD(char* value, char* message, float* temp);
+    void write_SD(float* value, char* message, float* temp);
     void hibernate();
  
 };

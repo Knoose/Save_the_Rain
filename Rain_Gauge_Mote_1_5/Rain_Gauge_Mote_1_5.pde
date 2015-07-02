@@ -43,7 +43,7 @@ void setup() {
   // Setting time [yy:mm:dd:dow:hh:mm:ss]
   // Sunday = 01, Monday = 02, ...
   // hours are in a 1-24 format.
-  if (RTC.setTime("15:06:24:04:18:10:00"))
+  if (RTC.setTime("15:07:02:05:11:00:00"))
     USB.println("DID NOT Set time Internally");
   else
     USB.println("Setting time Internally");
@@ -63,7 +63,7 @@ void loop() {
   // 0. Declarations
   /////////////////////////////////////////////////////////////
   //char convertFloat[10];
-  char combVal[7] = "000000";
+  float combVal[7];
   float temp[5];
   // char combVal2[7] = "000000";
   // float temp2[5];

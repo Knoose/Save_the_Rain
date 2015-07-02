@@ -114,13 +114,14 @@ void Rain_Gauge::set_Power(int val)
     else
       dp.println(debug,"Power not set.");
 }
-char Rain_Gauge::convert_Pressure(int firstVal, int secondVal, char * combVal){
+char Rain_Gauge::convert_Pressure(int firstVal, int secondVal, float * combVal){
    // Converts 2 int bytes to char * and then concatenates them
    char newVar[10];
    int totalVal = 0;
    totalVal = firstVal * 256 + secondVal; 
-   sprintf((char*)newVar, "%i\0",totalVal);
-   strcpy(combVal,newVar);
+   //sprintf((char*)newVar, "%i\0",totalVal);
+   //strcpy(combVal,newVar);
+   *combVal = totalVal;
 }
 float Rain_Gauge::convert_Temp(int val, float * temp){
   float cTemp, fTemp;
@@ -135,7 +136,7 @@ float Rain_Gauge::convert_Temp(int val, float * temp){
    //converts int to char *
    //float2string(cTemp,temp,3);
 }
-char Rain_Gauge::read_Pressure(char * combVal, float * temp, int I2C_ADDRESS){
+char Rain_Gauge::read_Pressure(float * combVal, float * temp, int I2C_ADDRESS){
   int val, firstVal, secondVal, thirdVal, Status;
   // Read I2C Device
   dp.print(debug,"I2C Address: ");
@@ -169,7 +170,7 @@ char Rain_Gauge::read_Pressure(char * combVal, float * temp, int I2C_ADDRESS){
   // Calculate the the total based on base 256
   convert_Pressure(firstVal, secondVal, combVal);
   dp.print(debug,"Decimal Pressure: ");
-  dp.println(debug,combVal);
+  dp.println_Int(debug,*combVal);
   dp.println(debug,"-------------------------------");
   // convert totalval to a char variable named combVal
   dp.print(debug,"RAWTemp: ");
@@ -178,7 +179,7 @@ char Rain_Gauge::read_Pressure(char * combVal, float * temp, int I2C_ADDRESS){
   dp.println(debug,"-------------------------------");
   //pressure2string(firstVal, secondVal, combVal); //gets RAW pressure value
 }
-int Rain_Gauge::send_RG(char* value, char* message, float* temp, char* MAC_ADDRESS)
+int Rain_Gauge::send_RG(float* value, char* message, float* temp, char* MAC_ADDRESS)
 {
   // Added to fix the only send once error
   xbeeDM.ON();
@@ -189,7 +190,7 @@ int Rain_Gauge::send_RG(char* value, char* message, float* temp, char* MAC_ADDRE
   // Create new frame (ASCII)
   frame.createFrame(ASCII,message); 
   // add frame field (String message) writes pressure value to SD Card
-  frame.addSensor(SENSOR_STR, (char *) value);
+  frame.addSensor(SENSOR_PA, *value);
   // add frame field (string message) writes temperature to SD card
   frame.addSensor(SENSOR_TCA, *temp);
   // add frame field (Battery level)
@@ -219,7 +220,7 @@ int Rain_Gauge::send_RG(char* value, char* message, float* temp, char* MAC_ADDRE
     return 0;
   }
 }
-void Rain_Gauge::write_SD(char* value, char* message, float* temp){
+void Rain_Gauge::write_SD(float* value, char* message, float* temp){
   SD.ON();
   
   char* path="/data";
@@ -238,7 +239,7 @@ void Rain_Gauge::write_SD(char* value, char* message, float* temp){
   frame.addSensor(SENSOR_STR, RTC.getTime());
   //frame.addSensor(SENSOR_DATE,RTC.getTime());
   // add frame field (String message) writes pressure value to SD Card
-   frame.addSensor(SENSOR_STR, (char *) value);
+   frame.addSensor(SENSOR_PA, *value);
   // add frame field (string message) writes temperature to SD card
   frame.addSensor(SENSOR_TCA, *temp);
   // // add frame field (Battery level)
