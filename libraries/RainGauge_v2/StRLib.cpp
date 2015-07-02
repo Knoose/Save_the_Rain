@@ -229,13 +229,16 @@ void Rain_Gauge::write_SD(char* value, char* message, float* temp){
     
   // Create files
   SD.create(filename);
-
+  frame.setID(message);
   // Create new frame (ASCII)
-  frame.createFrame(ASCII,message); 
+  frame.createFrame(ASCII); 
   // add frame field (String message) that writes the date and time
+  //frame.addSensor(SENSOR_DATE,RTC.year,RTC.month,RTC.date);
+  //frame.addSensor(SENSOR_TIME,RTC.hour,RTC.minute,RTC.second);
   frame.addSensor(SENSOR_STR, RTC.getTime());
+  //frame.addSensor(SENSOR_DATE,RTC.getTime());
   // add frame field (String message) writes pressure value to SD Card
-  frame.addSensor(SENSOR_STR, (char *) value);
+   frame.addSensor(SENSOR_STR, (char *) value);
   // add frame field (string message) writes temperature to SD card
   frame.addSensor(SENSOR_TCA, *temp);
   // // add frame field (Battery level)
@@ -244,7 +247,7 @@ void Rain_Gauge::write_SD(char* value, char* message, float* temp){
     dp.println(debug,"Append successful");
   else 
     dp.println(debug,"Append failed");
-  delay(500);
+  //delay(500);
   SD.OFF();
 }
 void Rain_Gauge::hibernate(){
@@ -258,6 +261,7 @@ void Rain_Gauge::hibernate(){
   dp.print(debug,"Battery Level: ");
   dp.print_Int(debug,PWR.getBatteryLevel());
   dp.println(debug,"%");
+ // Wire.begin();
   RTC.ON();
 }
 

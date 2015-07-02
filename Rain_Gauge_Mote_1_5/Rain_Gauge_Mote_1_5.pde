@@ -89,7 +89,7 @@ void loop() {
   /////////////////////////////////////////////////////////////
   RainGauge.write_SD(combVal, loc_0, temp);
   delay(500);
-  RainGauge.send_RG(combVal,loc_1,temp,MAC_ADDRESS);
+  RainGauge.send_RG(combVal,loc_0,temp,MAC_ADDRESS);
   delay(500);
   /////////////////////////////////////////////////////////////
   // 3. Write to SD card 
@@ -100,7 +100,8 @@ void loop() {
   // 4. Sleep For Fifteen Minutes
   /////////////////////////////////////////////////////////////
   // Days:Hours:Minutes:Seconds
-  PWR.deepSleep("00:00:05:00",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
+ // PWR.deepSleep("00:00:00:05",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
+  // RainGauge.set_Power(5);
   RainGauge.hibernate();
 }
 
