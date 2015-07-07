@@ -10,11 +10,11 @@ kjnucera@syr.edu
 
 
 # To Do:
-Add a sensor type to the inputs of the various send functions.
-Move the send function into their respective functions.
-Use RTC.data/ RTC.TIME for the data frames
-Figure out a a way to get the computer time and put it into the RTC function. 
-Also write code to allow OTA/ The meshlium to update the time of each of the waspmotes
+Y  Add a sensor type to the inputs of the various send functions.
+Y Move the send function into their respective functions.
+Y Use RTC.data/ RTC.TIME for the data frames
+N Figure out a a way to get the computer time and put it into the RTC function. 
+N Also write code to allow OTA/ The meshlium to update the time of each of the waspmotes
 
  */
 
@@ -119,6 +119,7 @@ char Rain_Gauge::convert_Pressure(int firstVal, int secondVal, float * combVal){
    char newVar[10];
    int totalVal = 0;
    totalVal = firstVal * 256 + secondVal; 
+   //If you want pressure as a string value.
    //sprintf((char*)newVar, "%i\0",totalVal);
    //strcpy(combVal,newVar);
    *combVal = totalVal;

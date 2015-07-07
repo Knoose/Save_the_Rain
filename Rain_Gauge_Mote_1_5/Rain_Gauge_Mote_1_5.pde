@@ -10,8 +10,8 @@
 #include <WaspFrame.h>
 
 // Change to false to disable debugging. Vise-Versa is true.
-//bool debug_Mode = false;
-bool debug_Mode = true;
+bool debug_Mode = false;
+//bool debug_Mode = true;
 
 // Gateway Mac Addresses ( Wireless Communication )
 char* MAC_ADDRESS="0013A20040794BAD"; // new meshlium
@@ -43,7 +43,7 @@ void setup() {
   // Setting time [yy:mm:dd:dow:hh:mm:ss]
   // Sunday = 01, Monday = 02, ...
   // hours are in a 1-24 format.
-  if (RTC.setTime("15:07:02:05:11:00:00"))
+  if (RTC.setTime("15:07:03:05:13:13:00"))
     USB.println("DID NOT Set time Internally");
   else
     USB.println("Setting time Internally");
@@ -63,7 +63,7 @@ void loop() {
   // 0. Declarations
   /////////////////////////////////////////////////////////////
   //char convertFloat[10];
-  float combVal[7];
+  float combVal[10];
   float temp[5];
   // char combVal2[7] = "000000";
   // float temp2[5];
@@ -82,6 +82,7 @@ void loop() {
   delay(500);
   // Read I2C Device
   RainGauge.read_Pressure(combVal, temp, I2C_ADDRESS2);
+  *combVal = -76.1933 + 1.6355 * ((*combVal)/4096) * 70.3069;
   delay(500);
   //RainGauge.read_Pressure(combVal2, temp2, I2C_ADDRESS3);
   /////////////////////////////////////////////////////////////
@@ -100,7 +101,7 @@ void loop() {
   // 4. Sleep For Fifteen Minutes
   /////////////////////////////////////////////////////////////
   // Days:Hours:Minutes:Seconds
- // PWR.deepSleep("00:00:00:05",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
+  PWR.deepSleep("00:00:01:00",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
   // RainGauge.set_Power(5);
   RainGauge.hibernate();
 }
