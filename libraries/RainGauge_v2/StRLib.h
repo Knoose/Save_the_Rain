@@ -159,6 +159,8 @@ public:
     */   
     void write_SD(float* value, char* message, float* temp);
     void hibernate();
+    void check_I2C(float* temp, float* pressure);
+    int reset_I2C();
  
 };
 extern Rain_Gauge   RainGauge;

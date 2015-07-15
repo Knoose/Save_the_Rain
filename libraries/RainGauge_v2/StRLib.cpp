@@ -178,6 +178,7 @@ char Rain_Gauge::read_Pressure(float * combVal, float * temp, int I2C_ADDRESS){
   dp.println_Int(debug,thirdVal);
   convert_Temp(thirdVal, temp); //gets the temperature in fahrenheit
   dp.println(debug,"-------------------------------");
+  check_I2C(temp, combVal);
   //pressure2string(firstVal, secondVal, combVal); //gets RAW pressure value
 }
 int Rain_Gauge::send_RG(float* value, char* message, float* temp, char* MAC_ADDRESS)
@@ -266,6 +267,45 @@ void Rain_Gauge::hibernate(){
  // Wire.begin();
   RTC.ON();
 }
+void Rain_Gauge::check_I2C(float* temp, float* pressure)
+  {
+    float badTemp = -50.00;
+    float badPress = 0.00;
+    int reset = 0;
+    if ((*temp == badTemp) && (*pressure == badPress))
+      reset = reset_I2C();
+    else 
+      reset = 0;
+    dp.print(debug,"I2C Reset: ");
+    dp.println_Int(debug,reset);
+  }
+int Rain_Gauge::reset_I2C()
+  {
+    dp.println(debug,"Executing: Wire.begin()");
+    Wire.begin();
+    dp.println(debug,"Executing: RTC.ON()");
+    RTC.ON();
+        char* path="/data";
+    char* filename="/data/log";
+    // create path
+    SD.mkdir(path);
+      
+    // Create files
+    SD.create(filename);
+    // Create new frame (ASCII)
+    frame.createFrame(ASCII); 
+    // add frame field (String message) that writes the date and time
+    //frame.addSensor(SENSOR_DATE,RTC.year,RTC.month,RTC.date);
+    //frame.addSensor(SENSOR_TIME,RTC.hour,RTC.minute,RTC.second);
+    frame.addSensor(SENSOR_STR, (char *) "I2C Reset");
+    if(SD.appendln(filename, frame.buffer, frame.length)) 
+      dp.println(debug,"Append successful");
+    else 
+      dp.println(debug,"Append failed");
+    //delay(500);
+    SD.OFF();
+    return 1;
+  }
 
 /******************************************************************************
  * HOP NODE CLASS: PUBLIC FUNCTIONS
