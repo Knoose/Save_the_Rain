@@ -281,12 +281,31 @@ void Rain_Gauge::check_I2C(float* temp, float* pressure)
   }
 int Rain_Gauge::reset_I2C()
   {
+    //SD.ON();
+    // #1
+    // Wire.close();
+    // delay(100);
+    // dp.println(debug,"Executing: Wire.begin()");
+    // Wire.begin();
+    // dp.println(debug,"Executing: RTC.ON()");
+    // RTC.ON();
+
+    // #2
+    PWR.sleep(WTD_500MS, ALL_OFF);
+    if( intFlag & WTD_INT )
+    {
+     intFlag &= ~(WTD_INT);
+    }
+    Wire.close();
     dp.println(debug,"Executing: Wire.begin()");
     Wire.begin();
     dp.println(debug,"Executing: RTC.ON()");
     RTC.ON();
-        char* path="/data";
-    char* filename="/data/log";
+    SD.ON();
+    // #3
+    
+    char* path="/error";
+    char* filename="/error/log";
     // create path
     SD.mkdir(path);
       
