@@ -104,6 +104,7 @@ void Rain_Gauge::read_Time()
   dp.print(debug, "Time day of week, YY/MM/DD, HH:MM:SS]:");
   dp.println(debug,RTC.getTime());
   dp.println(debug,"------------------------------------------");
+
 }
 void Rain_Gauge::set_Power(int val)
 {
@@ -178,7 +179,9 @@ char Rain_Gauge::read_Pressure(float * combVal, float * temp, int I2C_ADDRESS){
   dp.println_Int(debug,thirdVal);
   convert_Temp(thirdVal, temp); //gets the temperature in fahrenheit
   dp.println(debug,"-------------------------------");
-  check_I2C(temp, combVal);
+  Status = check_I2C(temp, combVal);
+  if (Status == 1)
+    read_Pressure(combVal,temp,I2C_ADDRESS);
   //pressure2string(firstVal, secondVal, combVal); //gets RAW pressure value
 }
 int Rain_Gauge::send_RG(float* value, char* message, float* temp, char* MAC_ADDRESS)
@@ -267,30 +270,29 @@ void Rain_Gauge::hibernate(){
  // Wire.begin();
   RTC.ON();
 }
-void Rain_Gauge::check_I2C(float* temp, float* pressure)
+int Rain_Gauge::check_I2C(float* temp, float* pressure)
   {
     float badTemp = -50.00;
     float badPress = 0.00;
+    char* checkTime  = (char*) RTC.getTime();
     int reset = 0;
-    if ((*temp == badTemp) && (*pressure == badPress))
+    if ((*temp == badTemp) && (*pressure == badPress)) 
       reset = reset_I2C();
     else 
       reset = 0;
+    if (checkTime == "error")
+      {
+        reset = 1;
+        reset_PWR();
+      }
+    else
+      reset = 0;
     dp.print(debug,"I2C Reset: ");
     dp.println_Int(debug,reset);
+    return reset;
   }
-int Rain_Gauge::reset_I2C()
+   int Rain_Gauge::reset_I2C()
   {
-    //SD.ON();
-    // #1
-    // Wire.close();
-    // delay(100);
-    // dp.println(debug,"Executing: Wire.begin()");
-    // Wire.begin();
-    // dp.println(debug,"Executing: RTC.ON()");
-    // RTC.ON();
-
-    // #2
     PWR.sleep(WTD_500MS, ALL_OFF);
     if( intFlag & WTD_INT )
     {
@@ -300,9 +302,10 @@ int Rain_Gauge::reset_I2C()
     dp.println(debug,"Executing: Wire.begin()");
     Wire.begin();
     dp.println(debug,"Executing: RTC.ON()");
+    set_Power(5);
+    delay(500);
     RTC.ON();
     SD.ON();
-    // #3
     
     char* path="/error";
     char* filename="/error/log";
@@ -325,6 +328,38 @@ int Rain_Gauge::reset_I2C()
     SD.OFF();
     return 1;
   }
+bool Rain_Gauge::saveTime()
+  {
+    Utils.writeEEPROM(1031,RTC.year);
+    Utils.writeEEPROM(1032,RTC.month);
+    Utils.writeEEPROM(1033,RTC.date);
+    Utils.writeEEPROM(1034,RTC.day);
+    Utils.writeEEPROM(1035,RTC.hour);
+    Utils.writeEEPROM(1036,RTC.minute);
+    Utils.writeEEPROM(1037,RTC.second);
+  }
+void Rain_Gauge::reset_PWR(){
+    Utils.writeEEPROM(1030,1);
+    SD.ON();
+    
+    char* path="/error";
+    char* filename="/error/log";
+    // create path
+    SD.mkdir(path);
+      
+    // Create files
+    SD.create(filename);
+    // Create new frame (ASCII)
+    frame.createFrame(ASCII); 
+    frame.addSensor(SENSOR_STR, (char *) "POWER RESET");
+    if(SD.appendln(filename, frame.buffer, frame.length)) 
+      dp.println(debug,"Append successful");
+    else 
+      dp.println(debug,"Append failed");
+   SD.OFF();
+    PWR.reboot();
+}
+
 
 /******************************************************************************
  * HOP NODE CLASS: PUBLIC FUNCTIONS
