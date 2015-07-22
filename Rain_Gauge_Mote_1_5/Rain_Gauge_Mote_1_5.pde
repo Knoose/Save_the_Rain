@@ -10,7 +10,7 @@
 #include <WaspFrame.h>
 
 // Change to false to disable debugging. Vise-Versa is true.
-bool debug_Mode = false;
+bool debug_Mode = true;
 //bool debug_Mode = true;
 
 // Gateway Mac Addresses ( Wireless Communication )
@@ -29,6 +29,9 @@ char* loc_0 = "Link+";
 char* loc_1 = "Waverly_RG";
 char* loc_3 = "Bird_HN_W";
 char* loc_4 = "1/23/15_TEST";
+char* loc_5 = "LINK+_TEST1";
+char* loc_6 = "LINK+_TEST2";
+char* loc_7 = "LINK+_TEST3";
 
 void setup() {
   RainGauge.set_Debug(debug_Mode);
@@ -43,7 +46,7 @@ void setup() {
   // Setting time [yy:mm:dd:dow:hh:mm:ss]
   // Sunday = 01, Monday = 02, ...
   // hours are in a 1-24 format.
-  if (RTC.setTime("15:07:03:05:13:13:00"))
+  if (RTC.setTime("15:07:21:03:18:01:00"))
     USB.println("DID NOT Set time Internally");
   else
     USB.println("Setting time Internally");
@@ -82,15 +85,18 @@ void loop() {
   delay(500);
   // Read I2C Device
   RainGauge.read_Pressure(combVal, temp, I2C_ADDRESS2);
-  *combVal = -76.1933 + 1.6355 * ((*combVal)/4096) * 70.3069;
+  //*combVal = -76.1933 + 1.6355 * ((*combVal)/4096) * 70.3069;
+  //USB.print("Calculated Value: ");
+  //USB.println(*combVal);
+ // USB.println("");
   delay(500);
   //RainGauge.read_Pressure(combVal2, temp2, I2C_ADDRESS3);
   /////////////////////////////////////////////////////////////
   // 2. Send to Gateway
   /////////////////////////////////////////////////////////////
-  RainGauge.write_SD(combVal, loc_0, temp);
+  RainGauge.write_SD(combVal, loc_6, temp);
   delay(500);
-  RainGauge.send_RG(combVal,loc_0,temp,MAC_ADDRESS);
+  RainGauge.send_RG(combVal,loc_6,temp,MAC_ADDRESS);
   delay(500);
   /////////////////////////////////////////////////////////////
   // 3. Write to SD card 
@@ -101,7 +107,7 @@ void loop() {
   // 4. Sleep For Fifteen Minutes
   /////////////////////////////////////////////////////////////
   // Days:Hours:Minutes:Seconds
-  PWR.deepSleep("00:00:01:00",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
+  PWR.deepSleep("00:00:05:00",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
   // RainGauge.set_Power(5);
   RainGauge.hibernate();
 }
