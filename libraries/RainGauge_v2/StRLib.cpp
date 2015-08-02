@@ -41,28 +41,8 @@ int Rain_Gauge::Init(){
   // Open the USB connection
   // PAN (Personal Area Network) Identifier
   uint8_t  PANID[2]={0x7F,0xFF}; 
-  //USB.ON();
-  // init XBee 
-  //xbeeDM.ON();
   xbeeDM.setMeshNetworkRetries(0x06);
   dp.println(debug,"Rain Gauge Test:");
-  // Set I2C ON
-  //Wire.begin();
-  // Powers RTC up, init I2C bus and read initial values
-  //dp.println(debug,"Init RTC");
-  //RTC.ON();
-  
-  //dp.println(debug,"Init SD");
-  //SD.ON();
-  //char* path="/data";
-  //char* filename="/data/log";
-  
-  // create path
-  //SD.mkdir(path);
-    
-  // // Create files
-  //SD.create(filename);
-  // define folder and file to store data ( SD CARD )
   delay(2000);
   xbeeDM.flush();
   
@@ -70,7 +50,6 @@ int Rain_Gauge::Init(){
   //set PANID 
   /////////////////////////////////// 
   xbeeDM.setPAN(PANID);
-  
   // check flag
     if( xbeeDM.error_AT == 0 ) 
     {
@@ -104,6 +83,7 @@ void Rain_Gauge::read_Time()
   dp.print(debug, "Time day of week, YY/MM/DD, HH:MM:SS]:");
   dp.println(debug,RTC.getTime());
   dp.println(debug,"------------------------------------------");
+  //save_Time();
 
 }
 void Rain_Gauge::set_Power(int val)
@@ -258,16 +238,15 @@ void Rain_Gauge::write_SD(float* value, char* message, float* temp){
 }
 void Rain_Gauge::hibernate(){
   //PWR.deepSleep("00:00:00:10",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
-  if( intFlag & RTC_INT )
-  { 
-    intFlag &= ~(RTC_INT);
-    freeMemory();
-  }
+  // if( intFlag & RTC_INT )
+  // { 
+  //   intFlag &= ~(RTC_INT);
+  //   //freeMemory();
+  // }
   dp.println(debug,"------------------------------------------");
   dp.print(debug,"Battery Level: ");
   dp.print_Int(debug,PWR.getBatteryLevel());
   dp.println(debug,"%");
- // Wire.begin();
   RTC.ON();
 }
 int Rain_Gauge::check_I2C(float* temp, float* pressure)
@@ -281,12 +260,7 @@ int Rain_Gauge::check_I2C(float* temp, float* pressure)
     else 
       reset = 0;
     if (checkTime == "error")
-      {
-        reset = 1;
         reset_PWR();
-      }
-    else
-      reset = 0;
     dp.print(debug,"I2C Reset: ");
     dp.println_Int(debug,reset);
     return reset;
@@ -328,20 +302,35 @@ int Rain_Gauge::check_I2C(float* temp, float* pressure)
     SD.OFF();
     return 1;
   }
-bool Rain_Gauge::saveTime()
-  {
-    Utils.writeEEPROM(1031,RTC.year);
-    Utils.writeEEPROM(1032,RTC.month);
-    Utils.writeEEPROM(1033,RTC.date);
-    Utils.writeEEPROM(1034,RTC.day);
-    Utils.writeEEPROM(1035,RTC.hour);
-    Utils.writeEEPROM(1036,RTC.minute);
-    Utils.writeEEPROM(1037,RTC.second);
+bool Rain_Gauge::set_Time(char* date){
+  int address = 1030;
+  if(Utils.readEEPROM(address) == 1){
+     Utils.writeEEPROM(address,0);
   }
+  else
+  {
+    if (RTC.setTime(date))
+      dp.println(debug,"DID NOT Set time Internally");
+    else
+      dp.println(debug,"Setting time Internally");
+  }
+}
+/*bool Rain_Gauge::save_Time()
+  {
+    if ((strcmp(RTC.getTime(), "error")) != 0){
+      Utils.writeEEPROM(1031,RTC.year);
+      Utils.writeEEPROM(1032,RTC.month);
+      Utils.writeEEPROM(1033,RTC.date);
+      Utils.writeEEPROM(1034,RTC.day);
+      Utils.writeEEPROM(1035,RTC.hour);
+      Utils.writeEEPROM(1036,RTC.minute);
+      Utils.writeEEPROM(1037,RTC.second);
+    }
+  }*/
 void Rain_Gauge::reset_PWR(){
     Utils.writeEEPROM(1030,1);
     SD.ON();
-    
+    dp.println(debug,"POWER RESET");
     char* path="/error";
     char* filename="/error/log";
     // create path
@@ -356,7 +345,7 @@ void Rain_Gauge::reset_PWR(){
       dp.println(debug,"Append successful");
     else 
       dp.println(debug,"Append failed");
-   SD.OFF();
+    SD.OFF();
     PWR.reboot();
 }
 

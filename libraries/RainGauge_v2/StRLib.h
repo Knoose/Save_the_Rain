@@ -161,7 +161,7 @@ public:
     void hibernate();
     int check_I2C(float* temp, float* pressure);
     int reset_I2C();
-    bool saveTime();
+    bool set_Time(char* date);
     void reset_PWR();
  
 };
