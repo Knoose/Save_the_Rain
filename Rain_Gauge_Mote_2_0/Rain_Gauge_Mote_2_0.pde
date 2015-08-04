@@ -27,7 +27,8 @@ int I2C_ADDRESS4 = 104; //Address 0x68 -- Doesn't work with waspmote :(
 //Global Names for the location we're sending from
 char* loc_0 = "Link+";
 char* loc_1 = "Waverly_RG";
-char* loc_3 = "Bird_HN_W";
+char* loc_2 = "CoE_RG";
+char* loc_3 = "Barker_RG";
 char* loc_4 = "LINK+_TEST4";
 char* loc_5 = "LINK+_TEST1";
 char* loc_6 = "LINK+_TEST2";
@@ -95,9 +96,6 @@ void loop() {
   /////////////////////////////////////////////////////////////
   RainGauge.send_RG(combVal,loc_5,temp,MAC_ADDRESS);
   delay(500);
-  /////////////////////////////////////////////////////////////  
-  // Saving time in case of Malfunction
-  /////////////////////////////////////////////////////////////  
   /////////////////////////////////////////////////////////////
   // Sleep For Fifteen Minutes - Days:Hours:Minutes:Seconds
   /////////////////////////////////////////////////////////////
