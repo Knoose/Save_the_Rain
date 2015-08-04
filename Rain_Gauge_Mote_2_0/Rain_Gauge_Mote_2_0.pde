@@ -11,7 +11,7 @@
 
 // Change to false to disable debugging. Vise-Versa is true.
 bool debug_Mode = true;
-//bool debug_Mode = true;
+//bool debug_Mode = false;
 
 // Gateway Mac Addresses ( Wireless Communication )
 char* MAC_ADDRESS="0013A20040794BAD"; // new meshlium
@@ -28,12 +28,15 @@ int I2C_ADDRESS4 = 104; //Address 0x68 -- Doesn't work with waspmote :(
 char* loc_0 = "Link+";
 char* loc_1 = "Waverly_RG";
 char* loc_3 = "Bird_HN_W";
-char* loc_4 = "1/23/15_TEST";
+char* loc_4 = "LINK+_TEST4";
 char* loc_5 = "LINK+_TEST1";
 char* loc_6 = "LINK+_TEST2";
 char* loc_7 = "LINK+_TEST3";
+char* loc_8 = "LINK+_TEST5";
+
 
 void setup() {
+  Display dp;
   RainGauge.set_Debug(debug_Mode);
  // RainGauge.Init();
   USB.ON();
@@ -46,24 +49,16 @@ void setup() {
   // Setting time [yy:mm:dd:dow:hh:mm:ss]
   // Sunday = 01, Monday = 02, ...
   // hours are in a 1-24 format.
-  if (RTC.setTime("15:07:21:03:18:01:00"))
-    USB.println("DID NOT Set time Internally");
-  else
-    USB.println("Setting time Internally");
-  //if (debug_Mode){
-//  RainGauge.Init();
-//if (xbeeDM.setRTCfromMeshlium(MAC_ADDRESS))
-//    USB.println("Set Time From Meshlium");
-//   else
-//     USB.println("DID NOT Set Time From Meshlium");
-//   USB.println(F("-------------------------------"));
+  RainGauge.set_Time("15:07:24:06:09:48:00");
 }
 
 void loop() {
+  /////////////////////////////////////////////////////////////  
   // Powering on the PCB Board
+  /////////////////////////////////////////////////////////////  
   RainGauge.set_Power(5);
   /////////////////////////////////////////////////////////////  
-  // 0. Declarations
+  // Variable Declarations
   /////////////////////////////////////////////////////////////
   //char convertFloat[10];
   float combVal[10];
@@ -75,7 +70,7 @@ void loop() {
   /* 5VDC Analog Variable*/
   //double fiveVolt = 5;
   /////////////////////////////////////////////////////////////
-  // 1. Getting Inputs
+  // Getting Input Values
   /////////////////////////////////////////////////////////////
   //analog voltage between 0 - 3.3v (MAXBOTIX)
   //RainGauge.read_Analog(convertFloat, fiveVolt);
@@ -84,26 +79,29 @@ void loop() {
   //
   RainGauge.read_Time();
   delay(500);
+  /////////////////////////////////////////////////////////////  
   // Read I2C Device
+  /////////////////////////////////////////////////////////////  
   RainGauge.read_Pressure(combVal, temp, I2C_ADDRESS2);
   delay(500);
   //RainGauge.read_Pressure(combVal2, temp2, I2C_ADDRESS3);
   /////////////////////////////////////////////////////////////
-  // 2. Send to Gateway
+  // Write to SD card 
   /////////////////////////////////////////////////////////////
-  RainGauge.write_SD(combVal, loc_6, temp);
-  delay(500);
-  RainGauge.send_RG(combVal,loc_6,temp,MAC_ADDRESS);
+  RainGauge.write_SD(combVal, loc_5, temp);
   delay(500);
   /////////////////////////////////////////////////////////////
-  // 3. Write to SD card 
+  // Send to Gateway
   /////////////////////////////////////////////////////////////
+  RainGauge.send_RG(combVal,loc_5,temp,MAC_ADDRESS);
   delay(500);
+  /////////////////////////////////////////////////////////////  
+  // Saving time in case of Malfunction
+  /////////////////////////////////////////////////////////////  
   /////////////////////////////////////////////////////////////
-  // 4. Sleep For Fifteen Minutes
+  // Sleep For Fifteen Minutes - Days:Hours:Minutes:Seconds
   /////////////////////////////////////////////////////////////
-  // Days:Hours:Minutes:Seconds
-  PWR.deepSleep("00:00:05:00",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
+  PWR.deepSleep("00:00:00:05",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
   RainGauge.hibernate();
 }
 
