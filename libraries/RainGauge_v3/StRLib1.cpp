@@ -27,7 +27,7 @@ N Also write code to allow OTA/ The meshlium to update the time of each of the w
 //#include "../XBeeDM/WaspXBeeDM.h"
 #endif
 
-#include "StRLib.h"
+#include "StRLib1.h"
 
 //#define DEBUG 
 
@@ -51,14 +51,14 @@ int Rain_Gauge::Init(){
   /////////////////////////////////// 
   xbeeDM.setPAN(PANID);
   // check flag
-    if( xbeeDM.error_AT == 0 ) 
-    {
-       dp.println(debug,"PANID set OK");
-    }
-    else 
-    {
-       dp.println(debug,"Error setting PANID");  
-    }
+  if( xbeeDM.error_AT == 0 ) 
+  {
+     dp.println(debug,"PANID set OK");
+  }
+  else 
+  {
+     dp.println(debug,"Error setting PANID");  
+  }
   /////////////////////////////////////
   // write values to XBee module memory
   /////////////////////////////////////
@@ -78,20 +78,18 @@ int Rain_Gauge::Init(){
 bool Rain_Gauge::set_Debug(bool value){
   debug = value;
 }
-void Rain_Gauge::read_Time()
-{
+void Rain_Gauge::read_Time(){
   dp.print(debug, "Time day of week, YY/MM/DD, HH:MM:SS]:");
   dp.println(debug,RTC.getTime());
   dp.println(debug,"------------------------------------------");
 }
-void Rain_Gauge::set_Power(int val)
-{
-    if (val == 3)
-      PWR.setSensorPower(SENS_3V3,SENS_ON);
-    else if (val == 5)
-      PWR.setSensorPower(SENS_5V,SENS_ON);
-    else
-      dp.println(debug,"Power not set.");
+void Rain_Gauge::set_Power(int val){
+  if (val == 3)
+    PWR.setSensorPower(SENS_3V3,SENS_ON);
+  else if (val == 5)
+    PWR.setSensorPower(SENS_5V,SENS_ON);
+  else
+    dp.println(debug,"Power not set.");
 }
 char Rain_Gauge::convert_Pressure(int firstVal, int secondVal, float * combVal){
    // Converts 2 int bytes to char * and then concatenates them
@@ -118,7 +116,6 @@ float Rain_Gauge::convert_Temp(int val, float * temp){
 }
 char Rain_Gauge::read_Pressure(float * combVal, float * temp, int I2C_ADDRESS){
   int val, firstVal, secondVal, thirdVal, Status;
-  // Read I2C Device
   dp.print(debug,"I2C Address: ");
   dp.println_Hex(debug,I2C_ADDRESS);
   Wire.begin();
@@ -162,11 +159,21 @@ char Rain_Gauge::read_Pressure(float * combVal, float * temp, int I2C_ADDRESS){
     read_Pressure(combVal,temp,I2C_ADDRESS);
   //pressure2string(firstVal, secondVal, combVal); //gets RAW pressure value
 }
-int Rain_Gauge::send_RG(float* value, char* message, float* temp, char* MAC_ADDRESS)
-{
-  // Added xbeeDM.ON() to fix the only send once error
+char Rain_Gauge::average_Pressure(float * combVal, float * temp, int I2C_ADDRESS){
+  //int j = 0;
+  //float ave_Press, ave_Temp;
+  //while (j < 10){
+    //read_Pressure(combVal,temp,I2C_ADDRESS);
+    //ave_Press = ave_Press + *combVal;
+    //ave_Temp = ave_Temp + *temp;
+    //j++;
+  //}
+  //*combVal = ave_Press/10;
+  //*temp = ave_Temp/10;
+}
+int Rain_Gauge::send_RG(float* value, char* message, float* temp, char* MAC_ADDRESS){
+  // Added to fix the only send once error
   xbeeDM.ON();
-  //xbeeDM.setRTCfromMeshlium(MAC_ADDRESS);
   // Create the packet that we will send wirelessly
   packetXBee* packet; 
   // Create new frame (ASCII)
@@ -189,6 +196,7 @@ int Rain_Gauge::send_RG(float* value, char* message, float* temp, char* MAC_ADDR
   // check TX flag
   if( xbeeDM.error_TX == 0 )
   {
+    Utils.blinkGreenLED();
     dp.println(debug,"Packet sent successfully.");
     free(packet);
     packet=NULL;
@@ -196,6 +204,7 @@ int Rain_Gauge::send_RG(float* value, char* message, float* temp, char* MAC_ADDR
   }
   else
   {
+    Utils.blinkRedLED();
     dp.println(debug,"Didn't send value.");
     free(packet);
     packet=NULL;
@@ -216,7 +225,10 @@ void Rain_Gauge::write_SD(float* value, char* message, float* temp){
   // Create new frame (ASCII)
   frame.createFrame(ASCII); 
   // add frame field (String message) that writes the date and time
+  //frame.addSensor(SENSOR_DATE,RTC.year,RTC.month,RTC.date);
+  //frame.addSensor(SENSOR_TIME,RTC.hour,RTC.minute,RTC.second);
   frame.addSensor(SENSOR_STR, RTC.getTime());
+  //frame.addSensor(SENSOR_DATE,RTC.getTime());
   // add frame field (String message) writes pressure value to SD Card
    frame.addSensor(SENSOR_PA, *value);
   // add frame field (string message) writes temperature to SD card
@@ -227,6 +239,7 @@ void Rain_Gauge::write_SD(float* value, char* message, float* temp){
     dp.println(debug,"Append successful");
   else 
     dp.println(debug,"Append failed");
+  //delay(500);
   SD.OFF();
 }
 void Rain_Gauge::hibernate(){
@@ -277,11 +290,15 @@ int Rain_Gauge::check_I2C(float* temp, float* pressure)
     SD.create(filename);
     // Create new frame (ASCII)
     frame.createFrame(ASCII); 
+    // add frame field (String message) that writes the date and time
+    //frame.addSensor(SENSOR_DATE,RTC.year,RTC.month,RTC.date);
+    //frame.addSensor(SENSOR_TIME,RTC.hour,RTC.minute,RTC.second);
     frame.addSensor(SENSOR_STR, (char *) "I2C Reset");
     if(SD.appendln(filename, frame.buffer, frame.length)) 
       dp.println(debug,"Append successful");
     else 
       dp.println(debug,"Append failed");
+    //delay(500);
     SD.OFF();
     return 1;
   }
@@ -298,6 +315,11 @@ bool Rain_Gauge::set_Time(char* date){
       dp.println(debug,"Setting time Internally");
   }
 }
+// void Rain_Gauge::power_SAVE(){
+//   if (PWR.getBatteryLevel() < 10)
+//     while ( PWR.getBatteryLevel() < 20)
+//       PWR.deepSleep("00:01:00:00",RTC_OFFSET,RTC_ALM1_MODE1,SENS_OFF);
+// }
 void Rain_Gauge::reset_PWR(){
     Utils.writeEEPROM(1030,1);
     SD.ON();

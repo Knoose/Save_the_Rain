@@ -13,22 +13,17 @@
 /*
 * Module Operations:
 * ==================
-* 
+*
+*
 * Public Interface:
 * =================
 *
+*
 * Required Files:
 * ===============
-* string.h
-* stdint.h
-* stdlib.h
-* WConstants.h
-* WaspXBeeCore.h
-* WaspFrame.h
-* Wire.h
-* WaspXBeeDM.h
-* inttypes.h
-* ./Display/Display.h
+* Waspmote API
+* StRLib1.cpp
+* Display.h
 *
 * Build Command:
 * ==============
@@ -36,16 +31,7 @@
 *
 * Maintenance History:
 * ====================
-* ver 1.5 : 
-* ver 1.2 : 2 June 2014
-* - Discounted support for ver 1.1
-* - Changed the name from myLibrary to RainGauge()
-* - Added boolean Debug support
-* - Added Hop Node functionality
-* ver 1.1 : 29 May 2014
-* - Took functions from the old .pde file and created a library
-* ver 1.0 : 5 Sept 13
-* - first release
+*
 *
 
  *****************************************************************************
@@ -103,7 +89,13 @@ public:
     - value is a true/false value inputted by the user. 
     */
     bool set_Debug(bool value);  
+    /*
+    If Debug_mode is true, print out the time to the console. 
+    */
     void read_Time(); 
+    /*
+    turns on the external power supply. 5vdc or 3vdc.
+    */
     void set_Power(int val);
     /*
     This function takes two base 256 values and combines them into one decimal value. 
@@ -141,6 +133,9 @@ public:
     char read_Analog(char * convertFloat, double volt_level);
     /*
     This function reads pressure from an I2C pressure transducer. 
+    This function checks to see if the I2C bus is operating properly 
+    and will call average_pressure if it is, otherwise it will call
+    reset_I2C(). If check_I2C is true, recursively call read_Pressure().
     - FirstVal is the first base 256 byte.
     - SecondVal is the second base 256 byte.
     - ThirdVal is the third byte which represents temperature. 
@@ -149,27 +144,15 @@ public:
     - I2C_ADDRESS is the I2C address to read from.
     */   
     char read_Pressure(float * combVal, float * temp, int I2C_ADDRESS);
+        /*
+    This function reads pressure from an I2C pressure transducer but averages it.
+    */   
+    char average_Pressure(float * combVal, float * temp, int I2C_ADDRESS);
     /*
     This function sends the current battery level to a gateway.
     - MAC_ADDRESS is the Mac Address of the desired gateway. 
     */   
-    int send_Batt(char* MAC_ADDRESS, char* message);
-    /*
-    This function sends one string value to a gateway.
-    - Message is a way to define what you're sending.
-    - Value is the actual string that is being sent.
-    - MAC_ADDRESS is the Mac Address of the desired gateway. 
-     */   
-    int send_Frame(char* value, char* message, char* MAC_ADDRESS);
-    /* ## NOTE: This function currently is not compatible with the meshlium.
-    This function sends a data frame to the Meshlium. 
-    - ConvertFloat is the Maxboxtix analog value. 
-    - CombVal is the the pressure value.
-    - Temp is the temperature value.
-    - MAC_ADDRESS is the Mac Address of the desired gateway. 
-    */   
     int send_RG(float* value, char* message, float* temp, char* MAC_ADDRESS);
-    int send_RG_old(char* convertFloat, char* combVal, char* temp, char* MAC_ADDRESS);
     /*
     This function writes a data frame to the SD card.  
     - ConvertFloat is the Maxboxtix analog value. 
@@ -177,11 +160,40 @@ public:
     - Temp is the temperature value.
     */   
     void write_SD(float* value, char* message, float* temp);
+    /*
+    Prints out the battery level is debug_mode is true and executes RTC.ON()
+    */
     void hibernate();
+    /*
+    Checks to see if the I2C Bus is working properly by checking the value read from 
+    an I2C sensor.
+    */
     int check_I2C(float* temp, float* pressure);
+    /*
+    If the I2C bus is not working properly then:
+        - Reset the I2C and return 1 
+        - if getTime() returns error
+            - Call reset_PWR
+        - Write an error message to the SD card
+    */
     int reset_I2C();
+    /*
+    Checks to see if we called reset_PWR
+    If true:
+        Do not set the time.
+    Else:
+        User updated time and set it as th new time.
+    */
     bool set_Time(char* date);
+    /*
+        Resets the waspmote Device if RTC fails.
+    */
     void reset_PWR();
+    /*
+    Checks the battery level to see if it's dropped below a certain threshold. 
+    If it has, deepsleep until the battery level rises about a new threshold.
+    */
+    void power_SAVE();
  
 };
 extern Rain_Gauge   RainGauge;
