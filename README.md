@@ -9,7 +9,7 @@ Web Application
 
 This is an application written in primarily Python that is responsible for storing and displaying data from the Particle Electron devices in a web interface. The code necessary for this is currently in a private repository and will be moved here shortly. Please excuse any inconvience. 
 
-## Technology Used
+### Technology Used
 
 **Application**
 
@@ -24,17 +24,17 @@ This is an application written in primarily Python that is responsible for stori
 - **nginx** - HTTP server (like Apache)
 - **gunicorn** - Python WSGI server (runs our Python application)
 
-## Architecture Overview
+### Architecture Overview
 
 The Electron cloud has an active webhook listening for a specific `publish()` event from any Electron device. When the publish event runs every 15 minutes, the webhook sends an HTTP POST containing formatted JSON to a regular HTTP endpoint in our application, which processes and inserts the data into the MySQL database.
 
 The web application provides user and access management, searchable raw data, maps, more information, and much more.
 
-## Local Setup
+### Local Setup
 
 This application runs locally for development & testing, and is also deployed to the production machines locally via ssh.
 
-### Prereqresites
+#### Prereqresites
 
 You need the following installed on your machine before we get started. There should be installers on the official websites:
 
@@ -44,7 +44,7 @@ You need the following installed on your machine before we get started. There sh
 
 - MySQL or MariaDB
 
-### Set up (first time only)
+#### Set up (first time only)
 
 **Database**
 
@@ -71,7 +71,7 @@ This command will create an empty virtualenv called "venv". Now you can try acti
 
 Now we're ready to install dependencies and get everything up and running.
 
-### Installing Dependencies
+#### Installing Dependencies
 
 Before we run the application, we're going to need to install the dependencies:
 
@@ -82,7 +82,7 @@ Before we run the application, we're going to need to install the dependencies:
 
 If you get errors trying to install anything, save the error and let someone know.
 
-### Running the application (development)
+#### Running the application (development)
 
 Finally, we're ready to run the application:
 
@@ -94,12 +94,24 @@ Finally, we're ready to run the application:
 
 
 
-## Production Setup
+### Production Setup
 
-Coming soon
+Coming soon...
 
+Building a Rain Gauge
+---------------------
+
+Coming soon...
+
+Setting up a Particle Device
+-----------------------------
+
+This section will go into detail about setting up your local computer so that you can work with your Particle Electron offline. 
 
 Smart Rain Gauge
 ----------------
+
+This section will cover what components are needed to build a Smart Rain Gauge device.
+
 
 ### Getting Started
