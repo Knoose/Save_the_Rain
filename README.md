@@ -106,11 +106,11 @@ Coming soon...
 Setting up a Particle Device
 -----------------------------
 
-This section will go into detail about setting up your local computer so that you can work with your Particle Electron offline. A large majority of the section is borrowed from [Particle's own documentation]:https://docs.Particle.io.
+This section will go into detail about setting up your local computer so that you can work with your Particle Electron offline. A large majority of the section is borrowed from [Particle's own documentation](https://docs.Particle.io).
 
 ### Getting Started
 
-This section assumes you have a Electron from Particle. If not, head over to their [store] (https://store.particle.io/) and pick up your very own today. 
+This section assumes you have a Electron from Particle. If not, head over to their [store](https://store.particle.io/ "Particle's Store") and pick up your very own today. 
 
 #### What's All here?
 
@@ -124,7 +124,7 @@ The Antenna & USB Cable. The cellular antenna is imperative for the Electron to 
 
 The Battery. The Electron comes with a standard 2000mAh 3.7V LiPo battery (rechargeable) which allows the Electron to be powered over long periods of time without needing a connection to wired power source. Instead of using the batteries that came with the device, we will be using a 6600 3.7V LiPo battery for a more reliable automated system.
 
-For more technical details on what comes on your device, go [here] (http://bower.io/search/?q=flatdoc).
+For more technical details on what comes on your device, go [here](http://bower.io/search/?q=flatdoc).
 
 ### Useful Features
 
@@ -138,14 +138,14 @@ For more technical details on what comes on your device, go [here] (http://bower
 
 ### SIM Card Setup
 - Setup the SIM card by visting the online web [setup page]:https://setup.particle.io/.
-- You can also use the Particle Mobile App - [iPhone] (https://itunes.apple.com/us/app/particle-build-photon-electron/id991459054?ls=1&mt=8) | [Android](https://play.google.com/store/apps/details?id=io.particle.android.app)
+- You can also use the Particle Mobile App - [iPhone](https://itunes.apple.com/us/app/particle-build-photon-electron/id991459054?ls=1&mt=8) | [Android](https://play.google.com/store/apps/details?id=io.particle.android.app)
 
 ### Connecting over USB
-Check this [page] (https://docs.particle.io/guide/getting-started/connect/electron/) for the most up to date information.
+Check this [page](https://docs.particle.io/guide/getting-started/connect/electron/) for the most up to date information.
 
 It's worth noting here that you currently cannot set up an Electron from the command line (CLI) because we require that a credit card number be entered, but the CLI will be extremely useful for other things. Please use [setup page](https://setup.particle.io/) or the mobile apps found in the previous section.
 
-For all of the following methods, the device must be in [Listening Mode] (https://docs.particle.io/guide/getting-started/modes/electron/#listening-mode), where the RGB LED is blinking blue.Particle devices boot into listening mode by default, so if your device is brand new, it should go straight into listening mode. If your device is not blinking blue, hold down the MODE button.
+For all of the following methods, the device must be in [Listening Mode](https://docs.particle.io/guide/getting-started/modes/electron/#listening-mode), where the RGB LED is blinking blue.Particle devices boot into listening mode by default, so if your device is brand new, it should go straight into listening mode. If your device is not blinking blue, hold down the MODE button.
 
 There are a two ways to go about connecting your device over USB, depending on your OS. 
 
@@ -155,7 +155,7 @@ We're going to install the Particle CLI(Command Line Interface) on your computer
 
 ##### Installing Node.js
 
-The Particle CLI runs with Node.js. Grab the latest version from the [Node.js website] (https://nodejs.org/en/download/).
+The Particle CLI runs with Node.js. Grab the latest version from the [Node.js website](https://nodejs.org/en/download/).
 
 Launch the installer and follow the instructions to install node.js.
 Next, open your terminal, or preferred terminal program.
@@ -166,13 +166,13 @@ Type: npm install -g particle-cli
 Note: You may need to update xcode at this time.
 
 #### Using Windows
-An official, updated tutorial on CLI, DFU, and driver tools installation is referenced [here] (http://community.particle.io/t/particle-official-windows-10-full-cli-and-dfu-setup/18309).
+An official, updated tutorial on CLI, DFU, and driver tools installation is referenced [here](http://community.particle.io/t/particle-official-windows-10-full-cli-and-dfu-setup/18309).
 
 To connect and interact with a Particle Device over USB from a Windows machine, the easiest route is to use the Particle command line interface. The following describes how to install the Particle CLI on your computer. If you already have Node.js installed, you can skip to this step.
 
 ##### Installing Node.js
 
-The Particle CLI runs with Node.js. Grab the latest version from the [Node.js website] (https://nodejs.org/en/download/).
+The Particle CLI runs with Node.js. Grab the latest version from the [Node.js website](https://nodejs.org/en/download/).
 
 Run the installer you downloaded. Follow the prompts. The default file locations should be fine for this.
 
@@ -182,7 +182,7 @@ Node should now be installed! In the next step we will test it and install the C
 
 ##### Installing the Particle Driver
 
-You'll also need to install the Windows driver. Download it [here] (https://s3.amazonaws.com/spark-website/Particle.zip).
+You'll also need to install the Windows driver. Download it [here](https://s3.amazonaws.com/spark-website/Particle.zip).
 
 Unzip the file. It is fine to unzip this as a default into your Downloads folder.
 
@@ -190,7 +190,7 @@ Go to the Device Manager and double-click on your Particle device under **Other 
 Click **Update Driver**, and select **Browse for driver software on your computer**.
 
 Navigate to your Downloads folder, or wherever you unzipped the drivers.
-If you have a problem installing, you may have to temporarily disable the digitally signed driver enforcement policy. (We're sorry.) There are good instructions on how to do that [here] (http://www.howtogeek.com/167723/how-to-disable-driver-signature-verification-on-64-bit-windows-8.1-so-that-you-can-install-unsigned-drivers/).
+If you have a problem installing, you may have to temporarily disable the digitally signed driver enforcement policy. (We're sorry.) There are good instructions on how to do that [here](http://www.howtogeek.com/167723/how-to-disable-driver-signature-verification-on-64-bit-windows-8.1-so-that-you-can-install-unsigned-drivers/).
 
 ##### Opening Comand Prompt
 
@@ -210,9 +210,9 @@ Now let's try using the CLI!
 
 Please follow the instructions at https://setup.particle.io.
 
-If your device is not connecting, try troubleshooting [here] (here).
+If your device is not connecting, try troubleshooting [here](https://docs.particle.io/support/troubleshooting/common-issues).
 
-[More info on the CLI is available] (More info on the CLI is available).
+[More info on the CLI is available](More info on the CLI is available).
 
 
 
@@ -229,3 +229,10 @@ This section will cover what components are needed to build a Smart Rain Gauge d
 3. 7V 500mA Solar Panel
 4. Compatible Antenna
 5. Water Proof Housing
+
+
+
+ACKNOWLEDGEMENT
+---------------
+
+© 2016, Kyle Nucera
