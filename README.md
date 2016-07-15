@@ -80,6 +80,14 @@ Before we run the application, we're going to need to install the dependencies:
 3. `npm install`
 4. `bower install`
 
+```shell
+#Installing Dependencies
+pip install -r requirements.txt
+npm -g install bower
+npm install
+bower install
+```
+
 If you get errors trying to install anything, save the error and let someone know.
 
 #### Running the application (development)
@@ -100,6 +108,8 @@ Coming soon...
 
 Building a Rain Gauge
 ---------------------
+
+This section is for the physical Rain Gauge System and is:
 
 Coming soon...
 
@@ -124,7 +134,7 @@ The Antenna & USB Cable. The cellular antenna is imperative for the Electron to 
 
 The Battery. The Electron comes with a standard 2000mAh 3.7V LiPo battery (rechargeable) which allows the Electron to be powered over long periods of time without needing a connection to wired power source. Instead of using the batteries that came with the device, we will be using a 6600 3.7V LiPo battery for a more reliable automated system.
 
-For more technical details on what comes on your device, go [here](http://bower.io/search/?q=flatdoc).
+For more technical details on what comes with your device, go [here](https://docs.particle.io/datasheets/kits/#electron).
 
 ### Useful Features
 
@@ -137,7 +147,7 @@ For more technical details on what comes on your device, go [here](http://bower.
 - The signal strength (RSSI) will be shown in a 0-5 green blinks, 5 being the strongest
 
 ### SIM Card Setup
-- Setup the SIM card by visting the online web [setup page]:https://setup.particle.io/.
+- Setup the SIM card by visting the online web [setup page](https://setup.particle.io/).
 - You can also use the Particle Mobile App - [iPhone](https://itunes.apple.com/us/app/particle-build-photon-electron/id991459054?ls=1&mt=8) | [Android](https://play.google.com/store/apps/details?id=io.particle.android.app)
 
 ### Connecting over USB
@@ -162,8 +172,10 @@ Next, open your terminal, or preferred terminal program.
 
 ##### Install The Particle CLI
 
-Type: npm install -g particle-cli
+Type: `npm install -g particle-cli`
+
 ```shell
+#install particle's Command line Interface
  npm install -g particle-cli 
  ```
 
@@ -208,6 +220,7 @@ Now your Command Prompt, is open for use.
 In the Command Prompt window, type: 'npm install -g particle-cli' and press enter.
 
 ```shell
+#install particle's Command line Interface
 npm install -g particle-cli
 ```
 
@@ -215,7 +228,7 @@ Now let's try using the CLI!
 
 #### Connecting your Device
 
-If you haven't already please follow the instructions at [SIM Card Setup](#SIM Card Setup).
+If you haven't already please follow the instructions at [SIM Card Setup](#sim card setup).
 
 If your device is not connecting, try troubleshooting [here](https://docs.particle.io/support/troubleshooting/common-issues).
 
@@ -273,7 +286,7 @@ To see detailed information about device modes, please go to [Particle's documen
 
 ### Uploading Code
 
-There are three  ways in which to upload code sketches to your Electron device The first is to use their web [IDE](https://build.particle.io/build "IDE") (Interactive Develeopment Enviroment). This may be useful for newcomers but to conserve data usage, we will primarily use option #2. The second way is to upload code locally using Particle's [CLI](# Connecting over USB "Setup CLI"). The third way is to use their [Tinker Application](https://docs.particle.io/guide/getting-started/tinker/electron/ "Tinker Guide"). We will not be using this technique but feel free to play with it. 
+There are three  ways in which to upload code sketches to your Electron device The first is to use their web [IDE](https://build.particle.io/build "IDE") (Interactive Develeopment Enviroment). This may be useful for newcomers but to conserve data usage, we will primarily use option #2. The second way is to upload code locally using Particle's [CLI](#connecting over usb "Setup CLI"). The third way is to use their [Tinker Application](https://docs.particle.io/guide/getting-started/tinker/electron/ "Tinker Guide"). We will not be using this technique but feel free to play with it. 
 
 #### Compiling Code
 
@@ -294,20 +307,25 @@ The first two ways also allow you to upload code without using the CLI. If you h
 
 #### Uploading Code with the CLI
 
-**Please make sure you have correctly installed the [CLI](#Connecting over USB "Setup CLI")!!!** You will be using a terminal emulator for this part so make sure you understand basic commands such as navigating the file system directory. For OSX and Linux, you'll be using terminal and for Windows, Comand Prompt.
+**Please make sure you have correctly installed the [CLI](#connecting over usb "Setup CLI")!!!** You will be using a terminal emulator for this part so make sure you understand basic commands such as navigating the file system directory. For OSX and Linux, you'll be using terminal and for Windows, Comand Prompt.
 
 1. Connect your Electron to your computer and make sure you connect a battery to the Electron as well.
 2. Put the device into DFU mode. More information on device modes can be found [here](#Device Modes). 
 3. Navigate to the folder that has your `firmware.bin` file.
 4. From the command line, `particle flash --usb electron_firmware_XXX.bin`.
 
-```# How to flash an Electron over serial
+```shell
+# How to flash an Electron over serial
 particle flash --usb electron_firmware_XXX.bin
 ```
 
 *Note: If your Electron goes into safe mode, this is okay, just make sure that the system firmware you on the device matches the dependency of the system firmware built into the firmware application.*
 
+#### Update the Firmware
 
+The Electron booted into safe mode and you're unsure why. Chances are, Particle has released a firmware update for the Electron. When you compiled your code, the compiler used the most up to date firmware to build your code sketch. To fix, this we will be updating the firmware on your device. Updates and instructions can be found [here](https://github.com/spark/firmware/releases).
+
+*Note: If they have a Windows .exe file or a OSX .zip file, these will be the easiest ways of updating the device. Otherwise, you will need to use the CLI again.
 
 Smart Rain Gauge
 ----------------
@@ -322,10 +340,11 @@ This section will cover what components are needed to build a Smart Rain Gauge d
 3. 7V 500mA Solar Panel
 4. Compatible Antenna
 5. Water Proof Housing
+6. Rain Gauge 
 
 
 
 ACKNOWLEDGEMENT
 ---------------
 
-© 2016, Kyle Nucera
+© 2016, Kyle Nucera, Mike Escalante, Particle.io
