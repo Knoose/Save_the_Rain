@@ -163,8 +163,11 @@ Next, open your terminal, or preferred terminal program.
 ##### Install The Particle CLI
 
 Type: npm install -g particle-cli
-``` npm install -g particle-cli ```
-Note: You may need to update xcode at this time.
+```shell
+ npm install -g particle-cli 
+ ```
+
+*Note: You may need to update xcode at this time.*
 
 #### Using Windows
 An official, updated tutorial on CLI, DFU, and driver tools installation is referenced [here](http://community.particle.io/t/particle-official-windows-10-full-cli-and-dfu-setup/18309).
@@ -202,15 +205,17 @@ Now your Command Prompt, is open for use.
 
 ##### Installing the Particle CLI
 
-In the Command Prompt window, type: npm install -g particle-cli
-```npm install -g particle-cli```
-and press enter.
+In the Command Prompt window, type: 'npm install -g particle-cli' and press enter.
+
+```shell
+npm install -g particle-cli
+```
 
 Now let's try using the CLI!
 
 #### Connecting your Device
 
-If you haven't already please follow the instructions at [SIM Card Setup](### SIM Card Setup).
+If you haven't already please follow the instructions at [SIM Card Setup](#SIM Card Setup).
 
 If your device is not connecting, try troubleshooting [here](https://docs.particle.io/support/troubleshooting/common-issues).
 
@@ -232,11 +237,10 @@ Here are some great tutorials on the community for full installs:
 
 To upgrade Particle-CLI, enter the following command:
 
-`# how to update the particle-cli`
-`$ npm update -g particle-cli`
-
-```# how to update the particle-cli
-$ npm update -g particle-cli```
+```shell
+# how to update the particle-cli
+$ npm update -g particle-cli
+```
 
 ##### Getting Started
 
@@ -246,13 +250,16 @@ These next two commands are all you need to get started setting up an account, c
 
 This command will guide you through logging in or creating a new account as well as claiming your device!
 
-```# how to setup your account and your device
-$ particle setup```
+```shell
+# how to setup your account and your device
+$ particle setup
+```
 
 ##### Particle Help
 
 Shows you what commands are available and how to use them. You can also give the name of a command for detailed help.
-```
+
+```shell
 # how to get help
 $ particle help
 $ particle help keys
@@ -264,11 +271,11 @@ Now that we've gone over connecting your device, we're going to review the diffe
 
 To see detailed information about device modes, please go to [Particle's documentation](https://docs.particle.io/guide/getting-started/modes/electron/ "Electron Device Modes").
 
-### Uploading Code to the Electron
+### Uploading Code
 
 There are three  ways in which to upload code sketches to your Electron device The first is to use their web [IDE](https://build.particle.io/build "IDE") (Interactive Develeopment Enviroment). This may be useful for newcomers but to conserve data usage, we will primarily use option #2. The second way is to upload code locally using Particle's [CLI](# Connecting over USB "Setup CLI"). The third way is to use their [Tinker Application](https://docs.particle.io/guide/getting-started/tinker/electron/ "Tinker Guide"). We will not be using this technique but feel free to play with it. 
 
-#### Compiling Code.
+#### Compiling Code
 
 To write and compile code you have many option but we will only cover the three major ways.
 
@@ -276,21 +283,27 @@ The first way is to use the [Particle Dev IDE](https://www.particle.io/dev). Thi
 
 The second way is to use the [Build IDE](https://build.particle.io/). Using this way is very similar to the last except you will be using your browser to access the IDE. Again, Click on the cloud button to compile and download the firmware binary file. 
 
-The third way is to use the CLI. If you navigate to the folder that has your XXX.ino file and type the follow command: `particle compile electron`, the CLI will compile and generate a firmware binary in this directory. ```particle compile electron```
+The third way is to use the CLI. If you navigate to the folder that has your XXX.ino file and type the follow command: `particle compile electron`, the CLI will compile and generate a firmware binary in this directory. 
+
+```shell
+particle compile electron
+```
 
 The first two ways also allow you to upload code without using the CLI. If you have had issues installing the code this way, then upload the code by clicking the lightning bolt. This will compile and upload your code to the specified Electron device. Make sure the device is either in listening mode or breathing cyan before doing this.
 
 
 #### Uploading Code with the CLI
 
-**Please make sure you have correctly installed the [CLI](# Connecting over USB "Setup CLI")!!!** You will be using a terminal emulator for this part so make sure you understand basic commands such as navigating the file system directory. For OSX and Linux, you'll be using terminal and for Windows, Comand Prompt.
+**Please make sure you have correctly installed the [CLI](#Connecting over USB "Setup CLI")!!!** You will be using a terminal emulator for this part so make sure you understand basic commands such as navigating the file system directory. For OSX and Linux, you'll be using terminal and for Windows, Comand Prompt.
 
 1. Connect your Electron to your computer and make sure you connect a battery to the Electron as well.
-2. Put the device into DFU mode. More information on device modes can be found [here](#### Device Modes). 
+2. Put the device into DFU mode. More information on device modes can be found [here](#Device Modes). 
 3. Navigate to the folder that has your `firmware.bin` file.
 4. From the command line, `particle flash --usb electron_firmware_XXX.bin`.
+
 ```# How to flash an Electron over serial
-particle flash --usb electron_firmware_XXX.bin```
+particle flash --usb electron_firmware_XXX.bin
+```
 
 *Note: If your Electron goes into safe mode, this is okay, just make sure that the system firmware you on the device matches the dependency of the system firmware built into the firmware application.*
 
