@@ -11,7 +11,7 @@ This section is for the physical Rain Gauge System. This will be completed at a 
 Creating a PCB
 --------------
 
-Coming soon...
+You may be wondering what a PCB is. PCB stands for Printed Circuit Board and
 
 Setting up a Particle Device
 -----------------------------
@@ -53,7 +53,7 @@ For more technical details on what comes with your device, go [here](https://doc
 ### Connecting over USB
 Check this [page](https://docs.particle.io/guide/getting-started/connect/electron/) for the most up to date information.
 
-It's worth noting here that you currently cannot set up an Electron from the *Command Line Interface* (*CLI*) because Particle require's a credit card number be entered, but the CLI will be extremely useful for other things. Please use the [setup page](https://setup.particle.io/) or the mobile apps found in the previous section.
+It's worth noting here that you currently cannot set up an Electron from the **Command Line Interface** (**CLI**) because Particle require's a credit card number be entered, but the CLI will be extremely useful for other things. Please use the [setup page](https://setup.particle.io/) or the mobile apps found in the previous section.
 
 For all of the following methods, the device must be in [Listening Mode](https://docs.particle.io/guide/getting-started/modes/electron/#listening-mode), where the RGB LED is blinking blue.Particle devices boot into listening mode by default, so if your device is brand new, it should go straight into listening mode. If your device is not blinking blue, hold down the MODE button.
 
@@ -61,7 +61,7 @@ There are a two ways to go about connecting your device over USB, depending on y
 
 #### Using OSX
 
-We're going to install the Particle CLI on your computer. 
+We're going to install the **Particle CLI** on your computer. 
 
 ##### Installing Node.js
 
@@ -70,7 +70,7 @@ The Particle CLI runs with Node.js. Grab the latest version from the [Node.js we
 Launch the installer and follow the instructions to install node.js.
 Next, open your terminal, or preferred terminal program.
 
-*Note: Make sure you check to make sure the version of node is the most recent version.*
+*Note: Make sure you check the installed version of node is the most recent version.*
 
 ##### Install The Particle CLI
 
@@ -86,7 +86,7 @@ Type: `npm install -g particle-cli`
 #### Using Windows
 An official, updated tutorial on CLI, DFU, and driver tools installation is referenced [here](http://community.particle.io/t/particle-official-windows-10-full-cli-and-dfu-setup/18309).
 
-To connect and interact with a Particle Device over USB from a Windows machine, the easiest route is to use the Particle command line interface. The following describes how to install the Particle CLI on your computer. If you already have Node.js installed, you can skip to this step.
+To connect and interact with a Particle Device over USB from a Windows machine, the easiest route is to use the **Particle Command Line Interface**. The following describes how to install the Particle CLI on your computer. If you already have Node.js installed, you can skip to this step.
 
 ##### Installing Node.js
 
@@ -98,7 +98,7 @@ Restart your computer.
 
 Node should now be installed! In the next step we will test it and install the CLI.
 
-*Note: Make sure you check to make sure the version of node is the most recent version.*
+*Note: Make sure you check the installed version of node is the most recent version.*
 
 ##### Installing the Particle Driver
 
@@ -190,7 +190,7 @@ To see detailed information about device modes, please go to [Particle's documen
 
 ### Uploading Code
 
-There are three  ways in which to upload code sketches to your Electron device The first is to use their web [IDE](https://build.particle.io/build "IDE") (Interactive Develeopment Enviroment). This may be useful for newcomers but to conserve data usage, we will primarily use option #2. The second way is to upload code locally using Particle's [CLI](#connecting over usb "Setup CLI"). The third way is to use their [Tinker Application](https://docs.particle.io/guide/getting-started/tinker/electron/ "Tinker Guide"). We will not be using this technique but feel free to play with it. 
+There are three  ways in which to upload code sketches to your Electron device The first is to use their web [IDE](https://build.particle.io/build "IDE") (Interactive Develeopment Enviroment). This may be useful for newcomers but to conserve data usage, we will primarily use option #2. The second way is to upload code locally using Particle's [CLI](#connecting-over-usb "Setup CLI"). The third way is to use their [Tinker Application](https://docs.particle.io/guide/getting-started/tinker/electron/ "Tinker Guide"). We will not be using this technique but feel free to play with it. 
 
 #### Compiling Code
 
@@ -212,7 +212,7 @@ The first two ways also allow you to upload code without using the CLI. If you h
 
 #### Uploading Code with the CLI
 
-**Please make sure you have correctly installed the [CLI](#connecting over usb "Setup CLI")!!!** You will be using a terminal emulator for this part so make sure you understand basic commands such as navigating the file system directory. For OSX and Linux, you'll be using terminal and for Windows, Comand Prompt.
+**Please make sure you have correctly installed the [CLI](#connecting-over-usb "Setup CLI")!!!** You will be using a terminal emulator for this part so make sure you understand basic commands such as navigating the file system directory. For OSX and Linux, you'll be using terminal and for Windows, Comand Prompt.
 
 1. Connect your Electron to your computer and make sure you connect a battery to the Electron as well.
 2. Put the device into DFU mode. More information on device modes can be found [here](#Device Modes). 
@@ -279,7 +279,7 @@ system firmware version: 0.4.8
 
 After checking the firmware version go to [Particle's GitHub releases page](https://github.com/spark/firmware/releases) to see if the version is out of date. If it is, you will need to update the firmware on your Electron. Before updating, please check to make sure the Particle-CLI is up to date. If it's not, check [Upgrading to the Latest Version](#upgradong-to-the-latest-version)
 
-```
+```Bash
 # Check Particle-CLI version
 particle --version
 # Update Particle-CLI
@@ -345,7 +345,7 @@ You need the following installed on your machine before we get started. There sh
 
 - MySQL or MariaDB
 
-#### Set up (first time only)
+#### Setup (first time only)
 
 **Database**
 
